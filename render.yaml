@@ -1,0 +1,45 @@
+databases:
+  - name: cloudswork-db
+    databaseName: cloudswork
+    user: cloudswork
+    plan: free
+
+services:
+  # ── API Server ────────────────────────────────────────────────────────────
+  - type: web
+    name: cloudswork-api
+    runtime: node
+    plan: free
+    buildCommand: pnpm install && pnpm --filter @workspace/api-server run build
+    startCommand: node --enable-source-maps artifacts/api-server/dist/index.mjs
+    healthCheckPath: /api/healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cloudswork-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+
+  # ── Frontend ──────────────────────────────────────────────────────────────
+  - type: web
+    name: cloudswork-frontend
+    runtime: node
+    plan: free
+    buildCommand: pnpm install && pnpm --filter @workspace/cloudswork run build
+    startCommand: node artifacts/cloudswork/server.mjs
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: API_URL
+        fromService:
+          name: cloudswork-api
+          type: web
+          property: host
+          envVarKey: RENDER_EXTERNAL_URL
