@@ -1,0 +1,1012 @@
+╔══════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                              ║
+║              CLOUDSWORK — FREE HOSTING GUIDE (COMPLETE & ULTRA-DETAILED)                    ║
+║                         Written by: Qamar Shahzad                                           ║
+║                         Date: July 2026                                                      ║
+║                                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════╝
+
+Yeh file sirf hosting ke liye hai.
+Is file mein har us platform ka poora tarika bataya gaya hai jahan ap CloudsWork
+bilkul MUFT (FREE) host kar sakte hain — bina ek paisa diye.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+QUICK OVERVIEW — PLATFORMS AT A GLANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  #   Platform        Backend   Frontend   Database   Free Tier Limit        Difficulty
+  ─   ──────────      ───────   ────────   ────────   ──────────────────     ──────────
+  1   REPLIT          ✅ YES    ✅ YES     ✅ YES     Always-on (Hacker+)    ⭐ EASIEST
+  2   RAILWAY         ✅ YES    ✅ YES     ✅ YES     $5 free/month          ⭐⭐ EASY
+  3   RENDER          ✅ YES    ✅ YES     ✅ YES     750 hrs/month free     ⭐⭐ EASY
+  4   FLY.IO          ✅ YES    ✅ YES     ✅ YES     3 shared VMs free      ⭐⭐⭐ MEDIUM
+  5   VERCEL          ❌ NO     ✅ YES     ❌ NO      Unlimited frontend     ⭐ EASIEST
+  6   NETLIFY         ❌ NO     ✅ YES     ❌ NO      100GB bandwidth free   ⭐ EASIEST
+  7   KOYEB           ✅ YES    ✅ YES     ❌ NO      2 free instances       ⭐⭐ EASY
+  8   SUPABASE        ❌ NO     ❌ NO      ✅ YES     500MB DB free          ⭐ EASIEST
+  9   NEON DB         ❌ NO     ❌ NO      ✅ YES     3GB DB free            ⭐ EASIEST
+  10  ELEPHANTSQL     ❌ NO     ❌ NO      ✅ YES     20MB DB free           ⭐ EASIEST
+
+  BEST COMBINATION FOR CLOUDSWORK (FREE):
+  ➜ Option A (Simplest):  REPLIT Deploy — sab kuch ek jagah
+  ➜ Option B (Best):      RAILWAY — backend + DB ek jagah, frontend bhi
+  ➜ Option C (Fastest):   RENDER (backend) + NEON (DB) + NETLIFY (frontend)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1: REPLIT DEPLOY (SABSE ASAAN — AP PEHLE YAHAN HAIN)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Kyun choose karein?
+  → Ap already Replit par kaam kar rahe hain
+  → Koi extra setup nahi chahiye
+  → Database, Backend, Frontend — sab auto-configured hai
+  → Ek click se publish
+
+FREE PLAN KYA MILTA HAI:
+  • Hosting: Hamesha ON (always-on) — Replit Core/Hacker plan par
+  • Free plan: Project sleep ho jaata hai (10 min inactivity ke baad)
+  • Custom domain: Nahi milta free mein
+  • URL milti hai: https://cloudswork.YOUR_USERNAME.replit.app
+
+STEP-BY-STEP DEPLOY ON REPLIT:
+
+  STEP 1 — App ko Production-Ready banayein
+  ──────────────────────────────────────────
+  a) Apne Replit project mein yeh commands run karein (Shell mein):
+     
+     pnpm --filter @workspace/cloudswork run build
+     # Yeh frontend ka production build banata hai
+     
+  b) Check karein build hoi ya nahi:
+     ls artifacts/cloudswork/dist/
+     # Agar index.html nazar aaye to build successful hai
+
+  STEP 2 — Environment Variables Set karein
+  ──────────────────────────────────────────
+  a) Replit ke left panel mein "Secrets" (🔒 lock icon) click karein
+  b) Yeh secrets add karein:
+     
+     Key: SESSION_SECRET
+     Value: (koi bhi lamba random text, example: cloudswork_super_secret_key_2026_xyz_abc)
+     
+     Key: APP_URL
+     Value: https://cloudswork.YOUR_USERNAME.replit.app
+     (apna actual username daalen)
+     
+     Key: NODE_ENV
+     Value: production
+     
+  c) DATABASE_URL automatically set hoti hai — kuch karna nahi
+
+  STEP 3 — Deploy Button Click karein
+  ─────────────────────────────────────
+  a) Top-right mein "Deploy" button ya "Publish" button click karein
+  b) "Deploy to Autoscale" ya "Static Deploy" choose karein
+  c) Wait karein (1-3 minute)
+  d) Ap ko URL milegi: https://cloudswork.YOUR_USERNAME.replit.app
+
+  STEP 4 — Verify karein
+  ────────────────────────
+  a) URL open karein
+  b) Login karein: Phone: 09001234567 | Password: Admin@123456
+  c) Admin panel check karein
+
+PROBLEMS & SOLUTIONS:
+  ❌ "App is sleeping" — Free plan par hota hai, Replit Core upgrade karein ($7/month)
+  ❌ "Build failed" — Shell mein `pnpm install` dobara run karein phir build karein
+  ❌ "DB connection failed" — DATABASE_URL manually mat set karein, Replit auto set karta hai
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2: RAILWAY (SABSE BEHTAR FREE OPTION — HIGHLY RECOMMENDED)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Website: https://railway.app
+Sign-up: GitHub account se free sign up karein
+
+FREE PLAN KYA MILTA HAI:
+  • $5 free credit har month (kafi hai small apps ke liye)
+  • PostgreSQL database free
+  • Node.js backend free
+  • Custom domain: nahi (free plan)
+  • URL: https://cloudswork-production.up.railway.app
+  • Sleep: NAHI HOTA — 24/7 on rahta hai
+
+PRE-REQUIREMENTS:
+  □ GitHub account banana hoga (free at github.com)
+  □ CloudsWork code GitHub par upload karna hoga
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PART A: GitHub par Code Upload Karna
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  STEP 1 — GitHub Account Banayein
+  ──────────────────────────────────
+  a) https://github.com/signup par jayein
+  b) Username, email, password daalen
+  c) Email verify karein
+  d) Done
+
+  STEP 2 — New Repository Banayein
+  ──────────────────────────────────
+  a) GitHub par login karein
+  b) Top-right mein "+" button → "New repository" click karein
+  c) Repository name: cloudswork
+  d) Description: CloudsWork Investment Platform
+  e) Private rakhen (important — public mat karein)
+  f) "Create repository" click karein
+  g) Repository ka URL copy karein (example: https://github.com/YOUR_USERNAME/cloudswork)
+
+  STEP 3 — Replit se Code GitHub par Push Karein
+  ─────────────────────────────────────────────────
+  Replit Shell mein yeh commands ek ek kar ke run karein:
+  
+  a) Git initialize karein (agar pehle se nahi hai):
+     git init
+     
+  b) .gitignore check karein (node_modules upload mat hon):
+     cat .gitignore
+     # Agar .gitignore nahi hai to banayein:
+     echo "node_modules/" >> .gitignore
+     echo ".env" >> .gitignore
+     echo "dist/" >> .gitignore
+     echo ".DS_Store" >> .gitignore
+     
+  c) Apna GitHub repo add karein:
+     git remote add origin https://github.com/YOUR_USERNAME/cloudswork.git
+     # YOUR_USERNAME apne GitHub username se replace karein
+     
+  d) Sab files stage karein:
+     git add .
+     
+  e) Commit karein:
+     git commit -m "Initial CloudsWork deployment"
+     
+  f) Push karein:
+     git push -u origin main
+     # Ya: git push -u origin master
+     
+  g) GitHub username aur password maangega:
+     - Username: apna GitHub username
+     - Password: GitHub ka Personal Access Token (neeche dekho)
+     
+  STEP 3b — GitHub Personal Access Token Banana:
+  ────────────────────────────────────────────────
+  a) https://github.com/settings/tokens par jayein
+  b) "Generate new token" → "Generate new token (classic)" click karein
+  c) Note: "Replit Deploy"
+  d) Expiration: 90 days (ya No expiration)
+  e) Scopes: sirf "repo" checkbox tick karein
+  f) "Generate token" click karein
+  g) Token copy karein (ghp_xxxxxxxxxxxx format mein hoga)
+  h) Yeh token hi password ki jagah use karein git push mein
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PART B: Railway par Deploy Karna
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  STEP 4 — Railway Sign Up
+  ─────────────────────────
+  a) https://railway.app par jayein
+  b) "Login with GitHub" click karein
+  c) GitHub se authorize karein
+  d) Done — Railway dashboard open ho jayegi
+
+  STEP 5 — PostgreSQL Database Banana
+  ─────────────────────────────────────
+  a) Railway dashboard mein "New Project" click karein
+  b) "Provision PostgreSQL" choose karein (ya search mein "PostgreSQL" type karein)
+  c) "Deploy Now" click karein
+  d) Database ready hone ka wait karein (30 seconds)
+  e) Database par click karein → "Variables" tab open karein
+  f) "DATABASE_URL" copy kar lein — aise dikhegi:
+     postgresql://postgres:PASSWORD@HOST.railway.internal:5432/railway
+  g) Yeh URL save kar lein, baad mein chahiye hogi
+
+  STEP 6 — Database Tables Banana (Schema Push)
+  ───────────────────────────────────────────────
+  Railway ka DATABASE_URL Replit mein temporarily set karein:
+  
+  a) Replit mein Secrets panel open karein
+  b) Naya secret add karein:
+     Key: RAILWAY_DATABASE_URL
+     Value: (railway se copy ki hui DATABASE_URL)
+  c) Replit Shell mein run karein:
+     RAILWAY_DATABASE_URL="postgresql://..." pnpm --filter @workspace/db run push
+     # Ya agar Railway ka .env use karna hai:
+     DATABASE_URL="postgresql://YOUR_RAILWAY_URL" pnpm --filter @workspace/db run push
+  d) "All migrations completed" message aaye to schema push successful
+
+  STEP 7 — API Server (Backend) Railway par Deploy Karna
+  ────────────────────────────────────────────────────────
+  a) Railway dashboard → apna project → "New Service" click karein
+  b) "GitHub Repo" option choose karein
+  c) Apna cloudswork repository select karein
+  d) Service settings mein:
+     - Root Directory: artifacts/api-server
+     - Build Command: pnpm install && pnpm run build
+     - Start Command: pnpm run start
+     - Port: 8080
+  e) "Variables" tab mein yeh add karein:
+     
+     DATABASE_URL = (Railway PostgreSQL ka DATABASE_URL — internal URL use karein)
+     SESSION_SECRET = cloudswork_your_very_long_random_secret_key_here_2026
+     NODE_ENV = production
+     PORT = 8080
+     
+  f) "Deploy" click karein
+  g) Build logs dekhein — "Server started on port 8080" dikhe to success
+
+  STEP 8 — Frontend (Cloudswork Web) Railway par Deploy Karna
+  ─────────────────────────────────────────────────────────────
+  a) Same project mein "New Service" → "GitHub Repo"
+  b) Same repository select karein
+  c) Service settings:
+     - Root Directory: artifacts/cloudswork
+     - Build Command: pnpm install && pnpm run build
+     - Start Command: pnpm run preview --host --port $PORT
+     - Port: $PORT (Railway auto-assign karega)
+  d) "Variables" tab mein:
+     
+     VITE_API_URL = https://YOUR_BACKEND_SERVICE.up.railway.app
+     NODE_ENV = production
+     
+  e) "Deploy" click karein
+
+  STEP 9 — Domain Configure Karein
+  ──────────────────────────────────
+  a) Backend service → "Settings" → "Domains" → "Generate Domain"
+  b) URL milegi: https://cloudswork-api.up.railway.app
+  c) Frontend service → "Settings" → "Domains" → "Generate Domain"
+  d) URL milegi: https://cloudswork-web.up.railway.app
+  e) Frontend ke VITE_API_URL ko backend URL se update karein
+
+  STEP 10 — Admin User Banana Railway Database Mein
+  ───────────────────────────────────────────────────
+  a) Railway database → "Query" tab open karein
+  b) Run karein:
+     SELECT * FROM users WHERE phone = '09001234567';
+     -- Agar koi user nahi mila to pehle register karein
+  c) Phir:
+     UPDATE users SET is_admin = true WHERE phone = '09001234567';
+  d) Done — admin access mil gaya
+
+RAILWAY PROBLEMS & SOLUTIONS:
+  ❌ "Build failed: pnpm not found" — Add env var: NIXPACKS_NODE_VERSION=20
+  ❌ "Cannot connect to database" — Internal URL use karein (not public URL) 
+  ❌ "Port already in use" — PORT env var set karein $PORT se
+  ❌ "CORS error" — API server mein CORS_ORIGIN = frontend URL set karein
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3: RENDER (GOOD FREE OPTION — BACKEND + FRONTEND + DB)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Website: https://render.com
+Sign-up: GitHub account se free
+
+FREE PLAN KYA MILTA HAI:
+  • Web Services: 750 hours/month (enough for 1 service 24/7)
+  • PostgreSQL: 1GB free (90 days ke baad delete — upgrade zaroor)
+  • Static Sites: Unlimited (frontend ke liye)
+  • Sleep: Haan — 15 min inactivity ke baad sleep hota hai (free web service)
+  • Wake up: 30-50 seconds lagte hain first request par
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RENDER DEPLOY — POORA TARIKA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  STEP 1 — Render Account Banana
+  ────────────────────────────────
+  a) https://render.com/register par jayein
+  b) "Continue with GitHub" click karein
+  c) GitHub authorize karein
+  d) Done
+
+  STEP 2 — PostgreSQL Database Banana
+  ─────────────────────────────────────
+  a) Dashboard → "New +" → "PostgreSQL"
+  b) Settings:
+     Name: cloudswork-db
+     Database: cloudswork
+     User: cloudswork_user
+     Region: Oregon (US West) — ya apke nearest
+     Plan: Free
+  c) "Create Database" click karein
+  d) Database banne ka wait karein (1-2 min)
+  e) "Connection" section mein se "External Database URL" copy karein:
+     postgresql://cloudswork_user:PASSWORD@HOST.oregon-postgres.render.com/cloudswork
+  f) Yeh URL save karein
+
+  STEP 3 — Schema Push (Tables Banana)
+  ──────────────────────────────────────
+  Replit Shell mein:
+  
+  DATABASE_URL="postgresql://cloudswork_user:PASSWORD@HOST.render.com/cloudswork" \
+  pnpm --filter @workspace/db run push
+  
+  "All tables created" message aaye to aage barhen
+
+  STEP 4 — Backend (API Server) Deploy
+  ──────────────────────────────────────
+  a) Dashboard → "New +" → "Web Service"
+  b) "Connect a repository" → apna cloudswork GitHub repo select karein
+  c) Settings:
+     Name: cloudswork-api
+     Region: Oregon
+     Branch: main
+     Root Directory: artifacts/api-server
+     Runtime: Node
+     Build Command: npm install -g pnpm && pnpm install && pnpm run build
+     Start Command: pnpm run start
+     Plan: Free
+  d) "Advanced" section mein Environment Variables add karein:
+     
+     DATABASE_URL   = (Render PostgreSQL ka INTERNAL URL — render dashboard se copy karein)
+     SESSION_SECRET = your_very_long_secret_key_minimum_32_characters_long
+     NODE_ENV       = production
+     PORT           = 10000
+     
+  e) "Create Web Service" click karein
+  f) Build start ho jayegi — 3-5 min lagengi
+  g) "Your service is live" message aaye to success
+  h) URL milegi: https://cloudswork-api.onrender.com
+
+  STEP 5 — Frontend Deploy (Static Site)
+  ────────────────────────────────────────
+  a) Dashboard → "New +" → "Static Site"
+  b) Same repository select karein
+  c) Settings:
+     Name: cloudswork-web
+     Branch: main
+     Root Directory: artifacts/cloudswork
+     Build Command: npm install -g pnpm && pnpm install && pnpm run build
+     Publish Directory: dist
+  d) Environment Variables:
+     VITE_API_URL = https://cloudswork-api.onrender.com
+  e) "Create Static Site" click karein
+  f) URL milegi: https://cloudswork-web.onrender.com
+
+  STEP 6 — Vite Config Update (IMPORTANT)
+  ─────────────────────────────────────────
+  Frontend ka vite.config.ts update karna hoga taaki production mein API calls kaam karein.
+  
+  Replit mein artifacts/cloudswork/vite.config.ts file mein yeh add karein:
+  
+  // Production mein API URL env variable se aayegi
+  define: {
+    'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || '')
+  }
+  
+  Phir frontend code mein:
+  const apiBase = import.meta.env.VITE_API_URL || ''
+  fetch(`${apiBase}/api/auth/login`, ...)
+
+  STEP 7 — Admin User Banana
+  ────────────────────────────
+  a) Render dashboard → cloudswork-db → "Shell" tab
+  b) Run karein:
+     SELECT * FROM users;
+     UPDATE users SET is_admin = true WHERE phone = '09001234567';
+  c) Ya app par register kar ke phir update karein
+
+RENDER PROBLEMS & SOLUTIONS:
+  ❌ "Service is sleeping" — Normal hai free plan par, 30 sec mein wake hoga
+  ❌ "Database deleted after 90 days" — Free plan limitation, Neon DB use karein
+  ❌ "Build timeout" — Build Command mein `--frozen-lockfile` add mat karein
+  ❌ "Cannot find module" — Root Directory dobara check karein
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4: FLY.IO (MOST POWERFUL FREE OPTION — ALWAYS ON)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Website: https://fly.io
+Sign-up: Email + Credit Card (verification ke liye, charge nahi hoga free tier mein)
+
+FREE PLAN KYA MILTA HAI:
+  • 3 shared-cpu-1x VMs (256MB RAM each) — ALWAYS ON, no sleeping
+  • 3GB persistent volume storage
+  • PostgreSQL: Fly Postgres free (1GB)
+  • Custom domain: Free (apna domain laga sakte hain)
+  • URLs: https://cloudswork-api.fly.dev
+
+NOTE: Credit card required for signup — lekin free tier mein koi charge nahi hoga
+      Agar credit card nahi hai to Railway ya Render use karein
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FLY.IO DEPLOY — POORA TARIKA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  STEP 1 — flyctl Install Karna (Replit Shell mein)
+  ───────────────────────────────────────────────────
+  curl -L https://fly.io/install.sh | sh
+  export PATH="$HOME/.fly/bin:$PATH"
+  fly version
+  # Version number aaye to install successful
+
+  STEP 2 — Login Karna
+  ──────────────────────
+  fly auth login
+  # Browser mein link open hoga — login karein
+
+  STEP 3 — PostgreSQL Database Banana
+  ─────────────────────────────────────
+  fly postgres create --name cloudswork-db --region sin --initial-cluster-size 1 --vm-size shared-cpu-1x --volume-size 1
+  # sin = Singapore (South Asia ke nearest)
+  # Ya: --region bom (Mumbai)
+  
+  # Database URL save karein jo output mein aayegi
+  # Example: postgres://postgres:PASSWORD@cloudswork-db.internal:5432
+
+  STEP 4 — API Server Deploy Karna
+  ──────────────────────────────────
+  a) Replit Shell mein:
+     cd artifacts/api-server
+     
+  b) Fly app create karein:
+     fly apps create cloudswork-api
+     
+  c) fly.toml file banayein (artifacts/api-server/fly.toml):
+     
+     app = "cloudswork-api"
+     primary_region = "sin"
+     
+     [build]
+       [build.args]
+         NODE_VERSION = "20"
+     
+     [env]
+       PORT = "8080"
+       NODE_ENV = "production"
+     
+     [http_service]
+       internal_port = 8080
+       force_https = true
+       auto_stop_machines = false
+       auto_start_machines = true
+       min_machines_running = 1
+     
+     [[vm]]
+       cpu_kind = "shared"
+       cpus = 1
+       memory_mb = 256
+     
+  d) Secrets set karein:
+     fly secrets set SESSION_SECRET="your_very_long_secret_key_here" -a cloudswork-api
+     fly secrets set DATABASE_URL="postgres://postgres:PASSWORD@cloudswork-db.internal:5432" -a cloudswork-api
+     
+  e) Deploy karein:
+     fly deploy -a cloudswork-api
+     
+  f) Status check karein:
+     fly status -a cloudswork-api
+     # "running" dikhe to success
+     
+  g) URL: https://cloudswork-api.fly.dev
+
+  STEP 5 — Frontend Deploy Karna
+  ────────────────────────────────
+  cd ../../artifacts/cloudswork  # (api-server se wapas)
+  pnpm run build
+  
+  fly apps create cloudswork-web
+  
+  # fly.toml banayein:
+  app = "cloudswork-web"
+  primary_region = "sin"
+  
+  [env]
+    VITE_API_URL = "https://cloudswork-api.fly.dev"
+  
+  [http_service]
+    internal_port = 4173
+    force_https = true
+  
+  fly deploy -a cloudswork-web
+
+  STEP 6 — Database Attach Karna
+  ────────────────────────────────
+  fly postgres attach cloudswork-db -a cloudswork-api
+  # Yeh automatically DATABASE_URL set kar deta hai
+
+  STEP 7 — Schema Push
+  ──────────────────────
+  fly ssh console -a cloudswork-api
+  # SSH session khuleyga
+  cd /app && npx drizzle-kit push
+  exit
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5: VERCEL (SIRF FRONTEND — BACKEND NAHI)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Website: https://vercel.com
+Note: Vercel sirf frontend (React) host karta hai. Backend Railway/Render par rakhein.
+
+FREE PLAN:
+  • 100GB bandwidth/month
+  • Unlimited deployments
+  • Custom domain: FREE (apna domain laga sakte hain — ek .com domain lete hain to laga sakte hain)
+  • Sleep: NAHI HOTA — always on (static files)
+  • URL: https://cloudswork.vercel.app
+
+STEP-BY-STEP:
+
+  STEP 1 — Account Banana
+  ─────────────────────────
+  a) https://vercel.com/signup
+  b) "Continue with GitHub" click karein
+  c) Done
+
+  STEP 2 — Project Import
+  ─────────────────────────
+  a) Dashboard → "Add New..." → "Project"
+  b) GitHub se cloudswork repo import karein
+  c) Configure karein:
+     Framework Preset: Vite
+     Root Directory: artifacts/cloudswork
+     Build Command: pnpm run build
+     Output Directory: dist
+     Install Command: npm install -g pnpm && pnpm install
+  d) Environment Variables add karein:
+     VITE_API_URL = https://your-backend.railway.app
+  e) "Deploy" click karein
+  f) URL milegi: https://cloudswork.vercel.app
+
+  STEP 3 — Domain
+  ─────────────────
+  Agar custom domain chahiye (e.g. cloudswork.com):
+  a) GoDaddy/Namecheap se domain khareedein (~$10-12/year)
+  b) Vercel → Settings → Domains → Add Domain
+  c) Domain registrar par CNAME record set karein:
+     CNAME: @ → cname.vercel-dns.com
+  d) 24 ghante mein active ho jayega
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6: NETLIFY (SIRF FRONTEND — VERCEL JITNA HI ACHHA)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Website: https://netlify.com
+
+FREE PLAN:
+  • 100GB bandwidth/month
+  • 300 build minutes/month
+  • Custom domain: FREE
+  • URL: https://cloudswork.netlify.app
+
+STEP-BY-STEP:
+
+  STEP 1 — Account + Deploy
+  ──────────────────────────
+  a) https://app.netlify.com/signup → "Sign up with GitHub"
+  b) "Add new site" → "Import an existing project"
+  c) GitHub → cloudswork repo select karein
+  d) Build settings:
+     Base directory: artifacts/cloudswork
+     Build command: pnpm run build
+     Publish directory: artifacts/cloudswork/dist
+  e) Environment variables:
+     VITE_API_URL = https://your-backend.railway.app
+  f) "Deploy site" click karein
+  g) URL: https://random-name.netlify.app
+
+  STEP 2 — URL Change Karein
+  ───────────────────────────
+  a) Site settings → "Change site name"
+  b) Name: cloudswork-app
+  c) URL: https://cloudswork-app.netlify.app
+
+  STEP 3 — Routing Fix (_redirects file)
+  ───────────────────────────────────────
+  React Router ke liye zaroor karein — warna page reload par 404 milega.
+  
+  artifacts/cloudswork/public/_redirects file banayein:
+  
+  /*    /index.html    200
+  
+  Yeh Netlify ko batata hai ke har URL index.html par redirect ho — React Router handle karega
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7: KOYEB (ACHHA ALTERNATIVE — NO CREDIT CARD)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Website: https://www.koyeb.com
+No credit card required!
+
+FREE PLAN:
+  • 2 free web services (512MB RAM each)
+  • Sleep: NAHI HOTA (always on!)
+  • No database included (use Neon DB separately)
+  • URL: https://cloudswork-api.koyeb.app
+
+STEP-BY-STEP:
+
+  STEP 1 — Account
+  ──────────────────
+  a) https://app.koyeb.com/signup
+  b) GitHub se sign up karein
+  c) Email verify karein
+
+  STEP 2 — Neon DB Set Up Karein (free PostgreSQL)
+  ──────────────────────────────────────────────────
+  a) https://neon.tech par jayein
+  b) "Sign up" → GitHub se
+  c) "New project" → name: cloudswork
+  d) Region: AWS us-east-1 (ya nearest)
+  e) "Create project" click karein
+  f) Connection string copy karein:
+     postgresql://neondb_owner:PASSWORD@ep-XXX.us-east-2.aws.neon.tech/neondb?sslmode=require
+  g) Yeh DATABASE_URL hai — save karein
+  h) Replit Shell mein schema push karein:
+     DATABASE_URL="postgresql://neondb_owner:PASSWORD@ep-XXX.neon.tech/neondb?sslmode=require" \
+     pnpm --filter @workspace/db run push
+
+  STEP 3 — API Server Deploy on Koyeb
+  ─────────────────────────────────────
+  a) Koyeb → "Create App"
+  b) "GitHub" source select karein
+  c) Repo: cloudswork, Branch: main
+  d) Settings:
+     Build command: cd artifacts/api-server && npm install -g pnpm && pnpm install && pnpm run build
+     Run command: cd artifacts/api-server && pnpm run start
+     Port: 8080
+  e) Environment variables:
+     DATABASE_URL = (Neon DB connection string)
+     SESSION_SECRET = your_secret_key
+     NODE_ENV = production
+     PORT = 8080
+  f) "Deploy" click karein
+  g) URL: https://cloudswork-api.koyeb.app
+
+  STEP 4 — Frontend Deploy on Koyeb
+  ────────────────────────────────────
+  a) "Create App" → GitHub
+  b) Same repo, same branch
+  c) Build command: cd artifacts/cloudswork && npm install -g pnpm && pnpm install && pnpm run build
+  d) Run command: cd artifacts/cloudswork && pnpm run preview --host --port 8080
+  e) Port: 8080
+  f) Env: VITE_API_URL = https://cloudswork-api.koyeb.app
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 8: NEON DB (SIRF DATABASE — BEST FREE POSTGRESQL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Website: https://neon.tech
+Note: Sirf database — kisi bhi backend ke saath use karein
+
+FREE PLAN:
+  • 3GB storage
+  • Unlimited connections
+  • Auto-suspend (5 min inactive ke baad) — lekin backend ke saath problem nahi
+  • No credit card required!
+  • Branching: Dev/Prod alag databases free mein
+
+KAISE SETUP KAREIN:
+
+  a) https://neon.tech → "Sign up" → GitHub
+  b) New Project → name: cloudswork → Region: nearest → Create
+  c) Connection Details se "Connection String" copy karein
+  d) .env mein ya Railway/Render/Koyeb mein DATABASE_URL set karein
+  e) Schema push karein:
+     DATABASE_URL="your_neon_url" pnpm --filter @workspace/db run push
+  f) Done — database ready!
+
+  NEON KE FAYDE:
+  ✓ 3GB free — CloudsWork ke liye kaafi hai
+  ✓ Automatic backups
+  ✓ SSL/TLS by default
+  ✓ Connection pooling built-in
+  ✓ Dashboard mein SQL editor
+  ✓ Railway/Render/Koyeb sabke saath kaam karta hai
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 9: SUPABASE (DATABASE + AUTH + STORAGE — ALL FREE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Website: https://supabase.com
+
+FREE PLAN:
+  • 500MB database
+  • 5GB bandwidth
+  • 1GB file storage
+  • 2 free projects
+  • Pauses after 7 days of inactivity (free plan)
+
+KAISE SETUP KAREIN:
+
+  a) https://supabase.com → "Start your project" → GitHub se login
+  b) "New project" → name: cloudswork → password: (strong password rakhen) → Region: Southeast Asia
+  c) "Create new project" → wait 2-3 minutes
+  d) Settings → Database → "Connection string" copy karein:
+     postgresql://postgres:PASSWORD@db.PROJECTREF.supabase.co:5432/postgres
+  e) Schema push karein Replit se:
+     DATABASE_URL="postgresql://postgres:PASSWORD@db.PROJECTREF.supabase.co:5432/postgres" \
+     pnpm --filter @workspace/db run push
+  f) Done!
+
+  NOTE: Supabase apna auth system bhi deta hai lekin CloudsWork ka apna auth hai
+        — Supabase sirf database ke taur par use karein
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 10: ELEPHANTSQL (SIMPLE FREE DATABASE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Website: https://www.elephantsql.com
+Note: Sirf 20MB free — sirf testing ke liye, production mein Neon use karein
+
+FREE PLAN:
+  • 20MB storage (bahut kam — 1000-2000 records tak)
+  • 5 connections
+  • No credit card
+
+KAISE SETUP KAREIN:
+  a) https://customer.elephantsql.com/login → "Sign up" → GitHub
+  b) "Create New Instance" → Plan: Tiny Turtle (Free)
+  c) Region: closest → Review → Create instance
+  d) URL copy karein → schema push karein (upar ki tarah)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 11: RECOMMENDED COMBINATIONS (BEST FREE SETUPS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ╔═══════════════════════════════════════════════════════════════════════╗
+  ║  OPTION 1: SABSE ASAAN (Replit par hi raho)                          ║
+  ╠═══════════════════════════════════════════════════════════════════════╣
+  ║  Frontend: Replit Deploy                                              ║
+  ║  Backend:  Replit Deploy (same project)                              ║
+  ║  Database: Replit PostgreSQL (automatic)                             ║
+  ║  Cost:     Free (with sleep) / $7/month (always-on)                  ║
+  ║  Effort:   ⭐ (1 click)                                              ║
+  ║  Best for: Quick testing, personal use                               ║
+  ╚═══════════════════════════════════════════════════════════════════════╝
+
+  ╔═══════════════════════════════════════════════════════════════════════╗
+  ║  OPTION 2: BEST FREE (Railway — sab ek jagah)                        ║
+  ╠═══════════════════════════════════════════════════════════════════════╣
+  ║  Frontend: Railway Static                                            ║
+  ║  Backend:  Railway Web Service                                       ║
+  ║  Database: Railway PostgreSQL                                        ║
+  ║  Cost:     $5 free credit/month (usually enough)                     ║
+  ║  Effort:   ⭐⭐ (GitHub → Railway)                                   ║
+  ║  Best for: Production use, no sleep, easy setup                      ║
+  ╚═══════════════════════════════════════════════════════════════════════╝
+
+  ╔═══════════════════════════════════════════════════════════════════════╗
+  ║  OPTION 3: MOST RELIABLE (Mix of best services)                      ║
+  ╠═══════════════════════════════════════════════════════════════════════╣
+  ║  Frontend: Vercel (fast CDN, no sleep)                               ║
+  ║  Backend:  Koyeb (always on, no credit card)                         ║
+  ║  Database: Neon (3GB free, reliable)                                 ║
+  ║  Cost:     100% FREE                                                  ║
+  ║  Effort:   ⭐⭐⭐ (3 platforms setup)                                ║
+  ║  Best for: Users who want best performance for free                  ║
+  ╚═══════════════════════════════════════════════════════════════════════╝
+
+  ╔═══════════════════════════════════════════════════════════════════════╗
+  ║  OPTION 4: ALWAYS-ON PREMIUM (Fly.io — like a real VPS)             ║
+  ╠═══════════════════════════════════════════════════════════════════════╣
+  ║  Frontend: Fly.io Static                                             ║
+  ║  Backend:  Fly.io Web Service (always on, never sleeps)              ║
+  ║  Database: Fly.io PostgreSQL (1GB free)                              ║
+  ║  Cost:     FREE (within free tier)                                   ║
+  ║  Effort:   ⭐⭐⭐⭐ (CLI required)                                   ║
+  ║  Best for: Developers who want real server control                   ║
+  ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 12: PRODUCTION DEPLOYMENT CHECKLIST (Kuch Na Bhoolen)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Kisi bhi platform par deploy karne se pehle yeh checklist complete karein:
+
+  □ SESSION_SECRET set hai (minimum 32 characters, random)
+  □ DATABASE_URL set hai (production database ki)
+  □ NODE_ENV = production set hai
+  □ APP_URL set hai (correct production URL)
+  □ pnpm run build successfully complete hoti hai locally
+  □ Database schema push complete hai (sab tables exist karein)
+  □ Admin user exist karta hai (phone: 09001234567)
+  □ Admin user ka is_admin = true hai
+  □ API server CORS origin correctly set hai (frontend URL)
+  □ Frontend VITE_API_URL correctly set hai (backend URL)
+  □ HTTPS enabled hai (modern hosting automatically karta hai)
+  □ .env file .gitignore mein hai (kabhi GitHub par upload mat ho)
+  □ node_modules .gitignore mein hai
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 13: ENVIRONMENT VARIABLES — PLATFORM-BY-PLATFORM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Yeh variables API Server (backend) par set karein:
+
+  Variable          Value                               Required
+  ──────────────    ─────────────────────────────────   ────────
+  DATABASE_URL      postgresql://user:pass@host/db       YES
+  SESSION_SECRET    random-long-string-min-32-chars      YES
+  NODE_ENV          production                           YES
+  PORT              8080 (ya platform jo assign kare)    YES
+  APP_URL           https://your-app.platform.com        NO (referral links ke liye)
+  LOG_LEVEL         info                                 NO (default: info)
+  CORS_ORIGIN       https://your-frontend.platform.com  NO (security ke liye chahiye)
+
+  Yeh variables Frontend (Vite) par set karein:
+
+  Variable          Value                               Required
+  ──────────────    ─────────────────────────────────   ────────
+  VITE_API_URL      https://your-backend.platform.com   YES (agar alag domain hai)
+
+  NOTE: VITE_ prefix zaroor lagayein — sirf VITE_ se shuru hone wale vars
+        frontend bundle mein include hote hain (Vite ka rule hai)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 14: COMMON ERRORS AUR UNKA HAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ERROR 1: "CORS error" / "Network request failed"
+  ──────────────────────────────────────────────────
+  Matlab: Frontend backend se baat nahi kar sakti
+  Fix:
+  a) artifacts/api-server/src/index.ts mein cors origin set karein:
+     cors({ origin: process.env.CORS_ORIGIN || '*' })
+  b) CORS_ORIGIN env var set karein = frontend ka URL
+  c) Redeploy karein
+
+  ERROR 2: "relation does not exist" / "table not found"
+  ───────────────────────────────────────────────────────
+  Matlab: Database mein tables nahi hain
+  Fix:
+  DATABASE_URL="your_production_db_url" pnpm --filter @workspace/db run push
+
+  ERROR 3: "JWT/Session invalid" / Logout ho jaata hai baar baar
+  ────────────────────────────────────────────────────────────────
+  Matlab: SESSION_SECRET set nahi hai ya galat hai
+  Fix: SESSION_SECRET env var dobara set karein (minimum 32 characters)
+
+  ERROR 4: "Cannot read properties of undefined"
+  ───────────────────────────────────────────────
+  Matlab: Koi env variable missing hai
+  Fix: Sab required env variables set karein (checklist Section 12 follow karein)
+
+  ERROR 5: "Build failed: Cannot find module 'pnpm'"
+  ────────────────────────────────────────────────────
+  Fix: Build command mein pehle pnpm install karein:
+  npm install -g pnpm && pnpm install && pnpm run build
+
+  ERROR 6: "Port 8080 already in use"
+  ─────────────────────────────────────
+  Fix: PORT env variable dynamically set karein ($PORT use karein hardcode mat karein)
+
+  ERROR 7: "App sleeping" / 502 Bad Gateway
+  ──────────────────────────────────────────
+  Matlab: Free plan par app sleep ho gayi
+  Fix options:
+  a) Cron job se har 14 min mein ping karein (UptimeRobot use karein — free)
+  b) Paid plan lein
+  c) Koyeb ya Fly.io use karein (always on, free)
+
+  ERROR 8: "Database password authentication failed"
+  ────────────────────────────────────────────────────
+  Fix: DATABASE_URL mein password special characters ko URL-encode karein
+  Example: @ → %40, # → %23, $ → %24
+
+  ERROR 9: Frontend blank page / White screen
+  ────────────────────────────────────────────
+  Fix: Browser console (F12) mein error dekhein
+  Common cause: VITE_API_URL galat hai ya set nahi
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 15: UPTIMEROBOT — APP KO HAMESHA JAAG RAKHEIN (FREE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Render ya Replit free plan par app sleep ho jaati hai.
+  UptimeRobot se ap har 5 min mein ping kar sakte hain — bilkul free!
+
+  SETUP:
+  a) https://uptimerobot.com → "Register for FREE"
+  b) "Add New Monitor" click karein
+  c) Type: HTTP(s)
+  d) Friendly Name: CloudsWork API
+  e) URL: https://your-api-url/api/health
+  f) Monitoring Interval: 5 minutes
+  g) "Create Monitor" click karein
+  h) Done — app ab kabhi sleep nahi karegi!
+
+  NOTE: Is feature ke liye API server mein /api/health endpoint hona chahiye
+        Agar nahi hai to /api/auth/login ya koi bhi GET endpoint use karein
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 16: CUSTOM DOMAIN (Apna .com Domain Lagana)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Agar ap www.cloudswork.pk ya www.cloudswork.com chahte hain:
+
+  STEP 1 — Domain Khareedein
+  ─────────────────────────────
+  Pakistan mein:
+  • PKNIC: https://pknic.net.pk (.pk domain — ~Rs 1000/year)
+  • HostBreak: https://hostbreak.com (cheap domains)
+  
+  International:
+  • Namecheap: https://namecheap.com (.com ~$10/year)
+  • GoDaddy: https://godaddy.com (.com ~$12/year)
+  • Porkbun: https://porkbun.com (.com ~$8/year — sabse sasta)
+
+  STEP 2 — Platform par Domain Add Karein
+  ─────────────────────────────────────────
+  Railway: Project → Settings → Domains → Add custom domain
+  Render: Service → Settings → Custom Domain
+  Vercel: Settings → Domains → Add
+  Netlify: Site settings → Domain management → Add domain
+  Fly.io: fly certs add your-domain.com -a your-app-name
+
+  STEP 3 — DNS Records Set Karein
+  ──────────────────────────────────
+  Domain registrar ke DNS settings mein:
+  
+  Type: CNAME
+  Host: www
+  Points to: (platform dega — e.g. cname.vercel-dns.com)
+  TTL: 3600
+  
+  Ya root domain ke liye:
+  Type: A
+  Host: @
+  Value: (platform ka IP address)
+  TTL: 3600
+  
+  DNS propagation: 30 min se 48 hours lagte hain
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 17: FINAL COMPARISON TABLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Platform     Free DB    Sleep?    Always On   CC Required   Best For
+  ──────────   ────────   ───────   ─────────   ───────────   ─────────────────────
+  Replit       ✅ Yes     With free plan   Paid   No         Existing project
+  Railway      ✅ Yes     ❌ No     ✅ Yes      No            Full stack, easy
+  Render       ✅ 90days  ✅ Yes    ❌ No       No            Simple backend
+  Fly.io       ✅ 1GB     ❌ No     ✅ Yes      Yes (verify)  Power users
+  Koyeb        ❌ No      ❌ No     ✅ Yes      No            No-CC always-on
+  Vercel       ❌ No      ❌ No     ✅ Yes      No            Frontend only
+  Netlify      ❌ No      ❌ No     ✅ Yes      No            Frontend only
+  Neon         ✅ 3GB     5min idle ✅ Yes      No            Best free DB
+  Supabase     ✅ 500MB   7days    ✅ Yes      No            DB + extras
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  MY RECOMMENDATION — AP KE LIYE BEST OPTION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. ABHI AZMAYEIN (5 minute):
+     → Replit Deploy button click karein — fastest way to go live
+
+  2. BEST FREE PRODUCTION (30 minute):
+     → GitHub par code push karein
+     → Railway par ek click se sab deploy karein
+     → $5 free credit se kaafi time chalega
+
+  3. PERMANENT FREE (1 hour):
+     → Neon DB (free database, 3GB)
+     → Koyeb (backend, always on, no credit card)
+     → Vercel (frontend, fastest CDN)
+     → UptimeRobot (monitoring, free)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                          Written by: Qamar Shahzad
+                   CloudsWork Investment Platform — 2026
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,0 +1,680 @@
+Complete Project Structure
+CloudsWork
+
+Splash Screen
+
+Login
+
+Register
+
+Forgot Password
+
+Dashboard
+
+Solar Plans
+
+Deposit
+
+Withdraw
+
+Referral
+
+Task
+
+Wallet
+
+Transaction History
+
+Notifications
+
+Profile
+
+Settings
+
+Support Chat
+
+Logout
+
+Admin Panel
+
+User Management
+
+Plan Management
+
+Deposit Approval
+
+Withdrawal Approval
+
+Task Management
+
+Commission Management
+
+Reports
+
+Settings
+
+Banners
+
+Payment Methods
+
+Support Tickets
+Database
+Users
+
+Wallet
+
+Plans
+
+Purchased Plans
+
+Daily Profit
+
+Deposits
+
+Withdrawals
+
+Banks
+
+Transactions
+
+Tasks
+
+Referral
+
+Commission
+
+Notifications
+
+Support
+
+Settings
+
+Admin
+
+Logs
+Login Screen
+
+Exactly like screenshot
+
+Header
+
+Green Gradient
+
+Large Logo
+
+Welcome Text
+
+Rounded Card
+
+Phone Input
+
+Password
+
+Login Button
+
+Create Account
+
+Forgot Password
+
+Validation
+
+Animation
+
+Register
+
+Phone Number
+
+Password
+
+Confirm Password
+
+Nickname
+
+Referral Code
+
+Register
+
+
+Dashboard
+
+Header
+
+User Name
+
+Wallet Balance
+
+Deposit Balance
+
+Withdraw Balance
+
+Glassmorphism Card
+
+Quick Buttons
+
+Transaction
+
+Solar
+
+Plans
+
+Redeem
+
+Salary
+
+Download
+
+Task
+
+Chat
+
+Progress Bar
+
+Referral Card
+
+Copy Button
+
+Statistics
+
+Bottom Navigation
+
+Home
+
+Plans
+
+Deposit
+
+Withdraw
+
+Profile
+
+Solar Plans
+
+Image
+
+Plan Name
+
+Price
+
+Daily Profit
+
+Duration
+
+Total Return
+
+Buy Button
+
+Limit
+
+Progress
+
+Purchase Confirmation
+
+Deposit
+
+Payment Method
+
+JazzCash
+
+EasyPaisa
+
+USDT TRC20
+
+USDT BEP20
+
+Bank
+
+Deposit Amount
+
+Currency Converter
+
+Voucher Upload
+
+Image Compression
+
+Submit
+
+Pending Status
+
+Approval
+
+Withdraw
+
+Wallet Selection
+
+Account Title
+
+IBAN
+
+Wallet Address
+
+Amount
+
+Fee Calculation
+
+Net Amount
+
+Submit
+
+History
+
+Status
+
+Profile
+
+Profile Image
+
+Nickname
+
+Phone
+
+Referral Link
+
+Statistics
+
+Deposit History
+
+Withdrawal History
+
+Team
+
+Bank Accounts
+
+Password Change
+
+Support Chat
+
+Logout
+
+Referral System
+
+Level 1
+
+7%
+
+Level 2
+
+3%
+
+Level 3
+
+1%
+
+Referral Link
+
+Copy
+
+QR Code
+
+Statistics
+
+Income
+
+Wallet
+
+Deposit
+
+Withdraw
+
+Profit
+
+Commission
+
+Bonus
+
+History
+
+Transaction History
+
+Deposit
+
+Withdrawal
+
+Purchase
+
+Profit
+
+Commission
+
+Refund
+
+Filter
+
+Export PDF
+
+Task Module
+
+Daily Check-in
+
+Watch Video
+
+Visit Website
+
+Share Link
+
+Reward
+
+History
+
+Notification System
+
+Firebase Push
+
+System Notification
+
+Deposit Approved
+
+Withdrawal Approved
+
+Plan Purchased
+
+Profit Added
+
+Referral Earned
+
+Admin Panel
+
+Dashboard
+
+Total Users
+
+Online Users
+
+Revenue
+
+Today's Deposit
+
+Today's Withdrawal
+
+Pending Deposit
+
+Pending Withdrawal
+
+Profit
+
+Charts
+
+User Management
+
+Create
+
+Edit
+
+Delete
+
+Suspend
+
+Search
+
+Filter
+
+Plan Management
+
+Create Plan
+
+Edit
+
+Delete
+
+Image
+
+Daily Profit
+
+Duration
+
+Price
+
+Limit
+
+Status
+
+Deposit Management
+
+Approve
+
+Reject
+
+View Voucher
+
+Notes
+
+Withdrawal Management
+
+Approve
+
+Reject
+
+Bank Details
+
+Fee
+
+Referral Management
+
+Levels
+
+Commission
+
+History
+
+Statistics
+
+Support
+
+Live Chat
+
+Tickets
+
+FAQ
+
+Announcements
+
+Security
+
+JWT Authentication
+
+BCrypt Password
+
+Rate Limiting
+
+OTP
+
+CSRF
+
+SQL Injection Protection
+
+XSS Protection
+
+HTTPS
+
+Firebase App Check
+
+Premium UI
+
+Glassmorphism
+
+Material 3
+
+Rounded Cards
+
+Gradient Background
+
+Animated Buttons
+
+Ripple Effect
+
+Hero Animation
+
+Dark Mode
+
+Light Mode
+
+Shimmer Loading
+
+Skeleton Loader
+
+Lottie Animation
+
+Blur Effects
+
+Premium Icons
+
+Google Fonts
+
+Flutter Packages
+go_router
+
+provider
+
+riverpod
+
+dio
+
+firebase_core
+
+firebase_auth
+
+firebase_messaging
+
+cached_network_image
+
+flutter_secure_storage
+
+shared_preferences
+
+image_picker
+
+file_picker
+
+flutter_svg
+
+lottie
+
+intl
+
+qr_flutter
+
+mobile_scanner
+
+permission_handler
+
+url_launcher
+
+Laravel Packages
+Sanctum
+
+Spatie Permission
+
+Laravel Filament
+
+Intervention Image
+
+Laravel Excel
+
+Laravel Backup
+
+Laravel Horizon
+
+Laravel Telescope
+
+Laravel Debugbar
+API Structure
+POST /login
+
+POST /register
+
+POST /logout
+
+GET /dashboard
+
+GET /plans
+
+POST /buy-plan
+
+POST /deposit
+
+POST /withdraw
+
+GET /transactions
+
+GET /profile
+
+PUT /profile
+
+POST /change-password
+
+GET /notifications
+
+POST /support
+
+GET /referral
+
+GET /team
+Performance
+Lazy Loading
+Image Caching
+API Caching
+Pagination
+Offline Support
+Compression
+Fast Startup
+Responsive Layout
+Folder Structure
+lib/
+
+core/
+
+theme/
+
+widgets/
+
+models/
+
+services/
+
+repository/
+
+api/
+
+features/
+
+login/
+
+register/
+
+dashboard/
+
+plans/
+
+deposit/
+
+withdraw/
+
+wallet/
+
+profile/
+
+notification/
+
+support/
+
+settings/
+
+main.dart
+My observations from the screenshots
+The interface is clean and modern but relatively simple.
+It looks like a responsive website running in a mobile browser (or WebView), not a fully native Android application.
+The backend likely stores user balances, plans, deposits, withdrawals, referrals, and transaction history in a database.
+Deposit approval appears to be manual (voucher upload reviewed by an admin).
+The bottom navigation and card layout are straightforward to reproduce in Flutter or as a responsive web app.
+
+If your goal is to build a premium commercial version, I would improve it by adding:
+
+Better typography and spacing.
+Smooth animations.
+Dark mode.
+Real-time notifications.
+Better charts for earnings.
+Stronger security (JWT, rate limiting).
+A professional admin dashboard.
+Better error handling and loading states.
+
+This would produce an app that is significantly more polished than the one shown in the screenshots while keeping the same overall functionality.

@@ -1,0 +1,2 @@
+- [CloudsWork stack decisions](cloudswork-stack.md) — auth token SHA256+salt, token key "cw_token", sessions table; admin support messages endpoint not in codegen, fetched manually.
+- [CloudsWork referral/commission system](cloudswork-referral-system.md) — referralsTable rows created at registration, commissions paid on deposit approval into commissionBalance (not walletBalance).

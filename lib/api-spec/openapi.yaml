@@ -1,0 +1,2037 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: CloudsWork Solar Investment Platform API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication
+  - name: dashboard
+    description: Dashboard data
+  - name: plans
+    description: Solar investment plans
+  - name: wallet
+    description: Wallet & transactions
+  - name: referral
+    description: Referral system
+  - name: tasks
+    description: Task module
+  - name: notifications
+    description: Notifications
+  - name: profile
+    description: User profile
+  - name: support
+    description: Support chat
+  - name: admin
+    description: Admin panel
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  # AUTH
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login with phone and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterInput"
+      responses:
+        "201":
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout current user
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /auth/forgot-password:
+    post:
+      operationId: forgotPassword
+      tags: [auth]
+      summary: Request password reset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForgotPasswordInput"
+      responses:
+        "200":
+          description: OTP sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /auth/me:
+    get:
+      operationId: getCurrentUser
+      tags: [auth]
+      summary: Get current authenticated user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  # DASHBOARD
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get dashboard summary
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardData"
+
+  /dashboard/stats:
+    get:
+      operationId: getDashboardStats
+      tags: [dashboard]
+      summary: Get earnings statistics chart data
+      responses:
+        "200":
+          description: Earnings chart data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EarningsStats"
+
+  # PLANS
+  /plans:
+    get:
+      operationId: getPlans
+      tags: [plans]
+      summary: List all solar investment plans
+      responses:
+        "200":
+          description: Plans list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Plan"
+
+  /plans/{id}:
+    get:
+      operationId: getPlan
+      tags: [plans]
+      summary: Get plan details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Plan details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plan"
+
+  /plans/{id}/purchase:
+    post:
+      operationId: purchasePlan
+      tags: [plans]
+      summary: Purchase a solar plan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Purchase successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PurchasedPlan"
+
+  /plans/purchased:
+    get:
+      operationId: getPurchasedPlans
+      tags: [plans]
+      summary: Get user's purchased plans
+      responses:
+        "200":
+          description: Purchased plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PurchasedPlan"
+
+  # WALLET / TRANSACTIONS
+  /wallet:
+    get:
+      operationId: getWallet
+      tags: [wallet]
+      summary: Get wallet balances
+      responses:
+        "200":
+          description: Wallet data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wallet"
+
+  /wallet/deposit:
+    post:
+      operationId: createDeposit
+      tags: [wallet]
+      summary: Submit a deposit request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DepositInput"
+      responses:
+        "200":
+          description: Deposit submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deposit"
+
+  /wallet/withdraw:
+    post:
+      operationId: createWithdrawal
+      tags: [wallet]
+      summary: Submit a withdrawal request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WithdrawalInput"
+      responses:
+        "200":
+          description: Withdrawal submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Withdrawal"
+
+  /wallet/transactions:
+    get:
+      operationId: getTransactions
+      tags: [wallet]
+      summary: Get transaction history
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [all, deposit, withdrawal, profit, commission, purchase, refund]
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Transaction list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionList"
+
+  /wallet/deposits:
+    get:
+      operationId: getDeposits
+      tags: [wallet]
+      summary: Get user deposit history
+      responses:
+        "200":
+          description: Deposit history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Deposit"
+
+  /wallet/withdrawals:
+    get:
+      operationId: getWithdrawals
+      tags: [wallet]
+      summary: Get user withdrawal history
+      responses:
+        "200":
+          description: Withdrawal history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Withdrawal"
+
+  /wallet/payment-methods:
+    get:
+      operationId: getPaymentMethods
+      tags: [wallet]
+      summary: Get available payment methods
+      responses:
+        "200":
+          description: Payment methods
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentMethod"
+
+  /wallet/settings:
+    get:
+      operationId: getWalletSettings
+      tags: [wallet]
+      summary: Get public wallet limits (min deposit/withdrawal, withdrawal fee)
+      responses:
+        "200":
+          description: Wallet settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WalletSettings"
+
+  # REFERRAL
+  /referral:
+    get:
+      operationId: getReferral
+      tags: [referral]
+      summary: Get referral info and stats
+      responses:
+        "200":
+          description: Referral data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReferralData"
+
+  /referral/team:
+    get:
+      operationId: getReferralTeam
+      tags: [referral]
+      summary: Get referral team members by level
+      responses:
+        "200":
+          description: Team data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamData"
+
+  # TASKS
+  /tasks:
+    get:
+      operationId: getTasks
+      tags: [tasks]
+      summary: Get available daily tasks
+      responses:
+        "200":
+          description: Tasks list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+
+  /tasks/{id}/complete:
+    post:
+      operationId: completeTask
+      tags: [tasks]
+      summary: Mark a task as completed
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Task completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskCompletion"
+
+  # NOTIFICATIONS
+  /notifications:
+    get:
+      operationId: getNotifications
+      tags: [notifications]
+      summary: Get user notifications
+      responses:
+        "200":
+          description: Notifications list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+  /notifications/{id}/read:
+    post:
+      operationId: markNotificationRead
+      tags: [notifications]
+      summary: Mark notification as read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Marked as read
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /notifications/read-all:
+    post:
+      operationId: markAllNotificationsRead
+      tags: [notifications]
+      summary: Mark all notifications as read
+      responses:
+        "200":
+          description: All marked as read
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  # PROFILE
+  /profile:
+    get:
+      operationId: getProfile
+      tags: [profile]
+      summary: Get user profile
+      responses:
+        "200":
+          description: Profile data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+
+  /profile/update:
+    put:
+      operationId: updateProfile
+      tags: [profile]
+      summary: Update user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileInput"
+      responses:
+        "200":
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+
+  /profile/change-password:
+    post:
+      operationId: changePassword
+      tags: [profile]
+      summary: Change user password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordInput"
+      responses:
+        "200":
+          description: Password changed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /profile/banks:
+    get:
+      operationId: getBankAccounts
+      tags: [profile]
+      summary: Get user bank accounts
+      responses:
+        "200":
+          description: Bank accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BankAccount"
+    post:
+      operationId: addBankAccount
+      tags: [profile]
+      summary: Add a bank account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BankAccountInput"
+      responses:
+        "201":
+          description: Bank account added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BankAccount"
+
+  # SUPPORT
+  /support/messages:
+    get:
+      operationId: getSupportMessages
+      tags: [support]
+      summary: Get support chat messages
+      responses:
+        "200":
+          description: Messages list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SupportMessage"
+    post:
+      operationId: sendSupportMessage
+      tags: [support]
+      summary: Send a support message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SupportMessageInput"
+      responses:
+        "201":
+          description: Message sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupportMessage"
+
+  # ADMIN
+  /admin/stats:
+    get:
+      operationId: getAdminStats
+      tags: [admin]
+      summary: Get admin dashboard statistics
+      responses:
+        "200":
+          description: Admin stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStats"
+
+  /admin/users:
+    get:
+      operationId: getAdminUsers
+      tags: [admin]
+      summary: List all users
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [all, active, suspended]
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Users list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminUserList"
+    post:
+      operationId: createAdminUser
+      tags: [admin]
+      summary: Create a new user (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminUserInput"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /admin/users/{id}:
+    put:
+      operationId: updateAdminUser
+      tags: [admin]
+      summary: Update user (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminUserUpdate"
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      operationId: deleteAdminUser
+      tags: [admin]
+      summary: Delete user (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /admin/users/{id}/suspend:
+    post:
+      operationId: suspendUser
+      tags: [admin]
+      summary: Suspend or unsuspend a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SuspendInput"
+      responses:
+        "200":
+          description: User suspension status changed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /admin/plans:
+    get:
+      operationId: getAdminPlans
+      tags: [admin]
+      summary: List all plans (admin)
+      responses:
+        "200":
+          description: Plans list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Plan"
+    post:
+      operationId: createPlan
+      tags: [admin]
+      summary: Create a new plan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlanInput"
+      responses:
+        "201":
+          description: Plan created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plan"
+
+  /admin/plans/{id}:
+    put:
+      operationId: updatePlan
+      tags: [admin]
+      summary: Update a plan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlanInput"
+      responses:
+        "200":
+          description: Plan updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plan"
+    delete:
+      operationId: deletePlan
+      tags: [admin]
+      summary: Delete a plan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Plan deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /admin/deposits:
+    get:
+      operationId: getAdminDeposits
+      tags: [admin]
+      summary: List all deposits (admin)
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [all, pending, approved, rejected]
+      responses:
+        "200":
+          description: Deposits list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Deposit"
+
+  /admin/deposits/{id}/approve:
+    post:
+      operationId: approveDeposit
+      tags: [admin]
+      summary: Approve a deposit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApprovalInput"
+      responses:
+        "200":
+          description: Deposit approved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deposit"
+
+  /admin/deposits/{id}/reject:
+    post:
+      operationId: rejectDeposit
+      tags: [admin]
+      summary: Reject a deposit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApprovalInput"
+      responses:
+        "200":
+          description: Deposit rejected
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deposit"
+
+  /admin/withdrawals:
+    get:
+      operationId: getAdminWithdrawals
+      tags: [admin]
+      summary: List all withdrawals (admin)
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [all, pending, approved, rejected]
+      responses:
+        "200":
+          description: Withdrawals list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Withdrawal"
+
+  /admin/withdrawals/{id}/approve:
+    post:
+      operationId: approveWithdrawal
+      tags: [admin]
+      summary: Approve a withdrawal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApprovalInput"
+      responses:
+        "200":
+          description: Withdrawal approved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Withdrawal"
+
+  /admin/withdrawals/{id}/reject:
+    post:
+      operationId: rejectWithdrawal
+      tags: [admin]
+      summary: Reject a withdrawal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApprovalInput"
+      responses:
+        "200":
+          description: Withdrawal rejected
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Withdrawal"
+
+  /admin/tasks:
+    get:
+      operationId: getAdminTasks
+      tags: [admin]
+      summary: List all tasks (admin)
+      responses:
+        "200":
+          description: Tasks list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+    post:
+      operationId: createTask
+      tags: [admin]
+      summary: Create a task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskInput"
+      responses:
+        "201":
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+
+  /admin/tasks/{id}:
+    put:
+      operationId: updateTask
+      tags: [admin]
+      summary: Update a task
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskInput"
+      responses:
+        "200":
+          description: Task updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+    delete:
+      operationId: deleteTask
+      tags: [admin]
+      summary: Delete a task
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Task deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /admin/support:
+    get:
+      operationId: getAdminSupportTickets
+      tags: [admin]
+      summary: Get all support tickets/chats (admin)
+      responses:
+        "200":
+          description: Support tickets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SupportTicket"
+
+  /admin/support/{userId}/reply:
+    post:
+      operationId: adminReplySupportMessage
+      tags: [admin]
+      summary: Reply to a user's support message
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SupportMessageInput"
+      responses:
+        "201":
+          description: Reply sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupportMessage"
+
+  /admin/reports/revenue:
+    get:
+      operationId: getRevenueReport
+      tags: [admin]
+      summary: Get revenue report data
+      responses:
+        "200":
+          description: Revenue report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RevenueReport"
+
+  /admin/settings:
+    get:
+      operationId: getAdminSettings
+      tags: [admin]
+      summary: Get system settings
+      responses:
+        "200":
+          description: Settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SystemSettings"
+    put:
+      operationId: updateAdminSettings
+      tags: [admin]
+      summary: Update system settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SystemSettingsInput"
+      responses:
+        "200":
+          description: Settings updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SystemSettings"
+
+  /admin/banners:
+    get:
+      operationId: getAdminBanners
+      tags: [admin]
+      summary: Get banners list
+      responses:
+        "200":
+          description: Banners list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Banner"
+    post:
+      operationId: createBanner
+      tags: [admin]
+      summary: Create a banner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BannerInput"
+      responses:
+        "201":
+          description: Banner created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Banner"
+
+  /admin/banners/{id}:
+    delete:
+      operationId: deleteBanner
+      tags: [admin]
+      summary: Delete a banner
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Banner deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /admin/payment-methods:
+    get:
+      operationId: getAdminPaymentMethods
+      tags: [admin]
+      summary: Get all payment methods (including inactive)
+      responses:
+        "200":
+          description: Payment methods list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentMethod"
+    post:
+      operationId: createPaymentMethod
+      tags: [admin]
+      summary: Create a deposit payment method
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentMethodInput"
+      responses:
+        "201":
+          description: Payment method created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentMethod"
+
+  /admin/payment-methods/{id}:
+    put:
+      operationId: updatePaymentMethod
+      tags: [admin]
+      summary: Update a deposit payment method
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentMethodInput"
+      responses:
+        "200":
+          description: Payment method updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentMethod"
+    delete:
+      operationId: deletePaymentMethod
+      tags: [admin]
+      summary: Delete a deposit payment method
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Payment method deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required: [status]
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required: [success]
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+      required: [token, user]
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        phone:
+          type: string
+        nickname:
+          type: string
+        email:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        referralCode:
+          type: string
+        referredBy:
+          type: ["string", "null"]
+        isAdmin:
+          type: boolean
+        isSuspended:
+          type: boolean
+        walletBalance:
+          type: number
+        depositBalance:
+          type: number
+        withdrawBalance:
+          type: number
+        createdAt:
+          type: string
+      required: [id, phone, nickname, referralCode, isAdmin, isSuspended, walletBalance, depositBalance, withdrawBalance, createdAt]
+
+    DashboardData:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        totalEarnings:
+          type: number
+        todayEarnings:
+          type: number
+        totalDeposit:
+          type: number
+        totalWithdraw:
+          type: number
+        totalReferrals:
+          type: integer
+        activeInvestments:
+          type: integer
+        recentTransactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+        banners:
+          type: array
+          items:
+            $ref: "#/components/schemas/Banner"
+        referralLink:
+          type: string
+      required: [user, totalEarnings, todayEarnings, totalDeposit, totalWithdraw, totalReferrals, activeInvestments, recentTransactions, banners, referralLink]
+
+    EarningsStats:
+      type: object
+      properties:
+        daily:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChartPoint"
+        weekly:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChartPoint"
+        monthly:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChartPoint"
+      required: [daily, weekly, monthly]
+
+    ChartPoint:
+      type: object
+      properties:
+        label:
+          type: string
+        profit:
+          type: number
+        commission:
+          type: number
+      required: [label, profit, commission]
+
+    Plan:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        imageUrl:
+          type: ["string", "null"]
+        price:
+          type: number
+        dailyProfitRate:
+          type: number
+        durationDays:
+          type: integer
+        totalReturn:
+          type: number
+        maxPurchases:
+          type: ["integer", "null"]
+        currentPurchases:
+          type: integer
+        isActive:
+          type: boolean
+        description:
+          type: ["string", "null"]
+      required: [id, name, price, dailyProfitRate, durationDays, totalReturn, currentPurchases, isActive]
+
+    PurchasedPlan:
+      type: object
+      properties:
+        id:
+          type: integer
+        planId:
+          type: integer
+        plan:
+          $ref: "#/components/schemas/Plan"
+        userId:
+          type: integer
+        startDate:
+          type: string
+        endDate:
+          type: string
+        totalEarned:
+          type: number
+        status:
+          type: string
+          enum: [active, completed, cancelled]
+        daysRemaining:
+          type: integer
+      required: [id, planId, plan, userId, startDate, endDate, totalEarned, status, daysRemaining]
+
+    Wallet:
+      type: object
+      properties:
+        totalBalance:
+          type: number
+        depositBalance:
+          type: number
+        withdrawBalance:
+          type: number
+        profitBalance:
+          type: number
+        commissionBalance:
+          type: number
+      required: [totalBalance, depositBalance, withdrawBalance, profitBalance, commissionBalance]
+
+    Deposit:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        amount:
+          type: number
+        currency:
+          type: string
+        paymentMethod:
+          type: string
+        voucherUrl:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [pending, approved, rejected]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, userId, amount, currency, paymentMethod, status, createdAt, updatedAt]
+
+    Withdrawal:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        amount:
+          type: number
+        fee:
+          type: number
+        netAmount:
+          type: number
+        walletType:
+          type: string
+        accountTitle:
+          type: ["string", "null"]
+        iban:
+          type: ["string", "null"]
+        walletAddress:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [pending, approved, rejected]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, userId, amount, fee, netAmount, walletType, status, createdAt, updatedAt]
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        type:
+          type: string
+          enum: [deposit, withdrawal, profit, commission, purchase, refund, bonus]
+        amount:
+          type: number
+        description:
+          type: string
+        status:
+          type: string
+          enum: [pending, completed, failed]
+        createdAt:
+          type: string
+      required: [id, userId, type, amount, description, status, createdAt]
+
+    TransactionList:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+        total:
+          type: integer
+        page:
+          type: integer
+        totalPages:
+          type: integer
+      required: [transactions, total, page, totalPages]
+
+    PaymentMethod:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum: [jazzcash, easypaisa, usdt_trc20, usdt_bep20, bank]
+        accountNumber:
+          type: string
+        accountTitle:
+          type: string
+        isActive:
+          type: boolean
+      required: [id, name, type, accountNumber, accountTitle, isActive]
+
+    WalletSettings:
+      type: object
+      properties:
+        minDeposit:
+          type: number
+        minWithdrawal:
+          type: number
+        withdrawalFeePercent:
+          type: number
+      required: [minDeposit, minWithdrawal, withdrawalFeePercent]
+
+    ReferralData:
+      type: object
+      properties:
+        referralCode:
+          type: string
+        referralLink:
+          type: string
+        totalReferrals:
+          type: integer
+        level1Count:
+          type: integer
+        level2Count:
+          type: integer
+        level3Count:
+          type: integer
+        totalCommission:
+          type: number
+        todayCommission:
+          type: number
+        level1Rate:
+          type: number
+        level2Rate:
+          type: number
+        level3Rate:
+          type: number
+      required: [referralCode, referralLink, totalReferrals, level1Count, level2Count, level3Count, totalCommission, todayCommission, level1Rate, level2Rate, level3Rate]
+
+    TeamData:
+      type: object
+      properties:
+        level1:
+          type: array
+          items:
+            $ref: "#/components/schemas/TeamMember"
+        level2:
+          type: array
+          items:
+            $ref: "#/components/schemas/TeamMember"
+        level3:
+          type: array
+          items:
+            $ref: "#/components/schemas/TeamMember"
+      required: [level1, level2, level3]
+
+    TeamMember:
+      type: object
+      properties:
+        id:
+          type: integer
+        nickname:
+          type: string
+        phone:
+          type: string
+        depositBalance:
+          type: number
+        joinedAt:
+          type: string
+      required: [id, nickname, phone, depositBalance, joinedAt]
+
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum: [check_in, watch_video, visit_website, share_link]
+        reward:
+          type: number
+        link:
+          type: ["string", "null"]
+        isCompleted:
+          type: boolean
+        isActive:
+          type: boolean
+      required: [id, title, description, type, reward, isCompleted, isActive]
+
+    TaskCompletion:
+      type: object
+      properties:
+        success:
+          type: boolean
+        reward:
+          type: number
+        message:
+          type: string
+      required: [success, reward, message]
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+        type:
+          type: string
+          enum: [deposit_approved, withdrawal_approved, plan_purchased, profit_added, referral_earned, system]
+        isRead:
+          type: boolean
+        createdAt:
+          type: string
+      required: [id, title, message, type, isRead, createdAt]
+
+    Profile:
+      type: object
+      properties:
+        id:
+          type: integer
+        phone:
+          type: string
+        nickname:
+          type: string
+        email:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        referralCode:
+          type: string
+        totalDeposit:
+          type: number
+        totalWithdraw:
+          type: number
+        totalProfit:
+          type: number
+        totalCommission:
+          type: number
+        memberSince:
+          type: string
+      required: [id, phone, nickname, referralCode, totalDeposit, totalWithdraw, totalProfit, totalCommission, memberSince]
+
+    BankAccount:
+      type: object
+      properties:
+        id:
+          type: integer
+        accountTitle:
+          type: string
+        iban:
+          type: string
+        bankName:
+          type: string
+        isDefault:
+          type: boolean
+      required: [id, accountTitle, iban, bankName, isDefault]
+
+    SupportMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        message:
+          type: string
+        isAdmin:
+          type: boolean
+        createdAt:
+          type: string
+      required: [id, userId, message, isAdmin, createdAt]
+
+    SupportTicket:
+      type: object
+      properties:
+        userId:
+          type: integer
+        userNickname:
+          type: string
+        userPhone:
+          type: string
+        lastMessage:
+          type: string
+        unreadCount:
+          type: integer
+        lastActivity:
+          type: string
+      required: [userId, userNickname, userPhone, lastMessage, unreadCount, lastActivity]
+
+    AdminStats:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+        onlineUsers:
+          type: integer
+        totalRevenue:
+          type: number
+        todayDeposit:
+          type: number
+        todayWithdrawal:
+          type: number
+        pendingDeposits:
+          type: integer
+        pendingWithdrawals:
+          type: integer
+        totalProfit:
+          type: number
+        revenueChart:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChartPoint"
+      required: [totalUsers, onlineUsers, totalRevenue, todayDeposit, todayWithdrawal, pendingDeposits, pendingWithdrawals, totalProfit, revenueChart]
+
+    AdminUserList:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        total:
+          type: integer
+        page:
+          type: integer
+        totalPages:
+          type: integer
+      required: [users, total, page, totalPages]
+
+    RevenueReport:
+      type: object
+      properties:
+        totalRevenue:
+          type: number
+        totalDeposits:
+          type: number
+        totalWithdrawals:
+          type: number
+        totalProfitPaid:
+          type: number
+        totalCommissionPaid:
+          type: number
+        netProfit:
+          type: number
+        monthlyData:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChartPoint"
+      required: [totalRevenue, totalDeposits, totalWithdrawals, totalProfitPaid, totalCommissionPaid, netProfit, monthlyData]
+
+    SystemSettings:
+      type: object
+      properties:
+        siteName:
+          type: string
+        withdrawalFeePercent:
+          type: number
+        minDeposit:
+          type: number
+        minWithdrawal:
+          type: number
+        referralLevel1Rate:
+          type: number
+        referralLevel2Rate:
+          type: number
+        referralLevel3Rate:
+          type: number
+        maintenanceMode:
+          type: boolean
+      required: [siteName, withdrawalFeePercent, minDeposit, minWithdrawal, referralLevel1Rate, referralLevel2Rate, referralLevel3Rate, maintenanceMode]
+
+    Banner:
+      type: object
+      properties:
+        id:
+          type: integer
+        imageUrl:
+          type: string
+        title:
+          type: ["string", "null"]
+        link:
+          type: ["string", "null"]
+        isActive:
+          type: boolean
+        order:
+          type: integer
+      required: [id, imageUrl, isActive, order]
+
+    # Input schemas
+    LoginInput:
+      type: object
+      properties:
+        phone:
+          type: string
+        password:
+          type: string
+      required: [phone, password]
+
+    RegisterInput:
+      type: object
+      properties:
+        phone:
+          type: string
+        password:
+          type: string
+        confirmPassword:
+          type: string
+        nickname:
+          type: string
+        referralCode:
+          type: ["string", "null"]
+      required: [phone, password, confirmPassword, nickname]
+
+    ForgotPasswordInput:
+      type: object
+      properties:
+        phone:
+          type: string
+      required: [phone]
+
+    DepositInput:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        paymentMethod:
+          type: string
+        voucherUrl:
+          type: ["string", "null"]
+      required: [amount, currency, paymentMethod]
+
+    WithdrawalInput:
+      type: object
+      properties:
+        amount:
+          type: number
+        walletType:
+          type: string
+        accountTitle:
+          type: ["string", "null"]
+        iban:
+          type: ["string", "null"]
+        walletAddress:
+          type: ["string", "null"]
+      required: [amount, walletType]
+
+    ProfileInput:
+      type: object
+      properties:
+        nickname:
+          type: string
+        email:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+
+    ChangePasswordInput:
+      type: object
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+        confirmPassword:
+          type: string
+      required: [currentPassword, newPassword, confirmPassword]
+
+    BankAccountInput:
+      type: object
+      properties:
+        accountTitle:
+          type: string
+        iban:
+          type: string
+        bankName:
+          type: string
+        isDefault:
+          type: boolean
+      required: [accountTitle, iban, bankName]
+
+    SupportMessageInput:
+      type: object
+      properties:
+        message:
+          type: string
+      required: [message]
+
+    ApprovalInput:
+      type: object
+      properties:
+        notes:
+          type: ["string", "null"]
+
+    SuspendInput:
+      type: object
+      properties:
+        suspended:
+          type: boolean
+      required: [suspended]
+
+    AdminUserInput:
+      type: object
+      properties:
+        phone:
+          type: string
+        nickname:
+          type: string
+        password:
+          type: string
+        isAdmin:
+          type: boolean
+      required: [phone, nickname, password]
+
+    AdminUserUpdate:
+      type: object
+      properties:
+        nickname:
+          type: string
+        phone:
+          type: string
+        isAdmin:
+          type: boolean
+        walletBalance:
+          type: number
+
+    PlanInput:
+      type: object
+      properties:
+        name:
+          type: string
+        imageUrl:
+          type: ["string", "null"]
+        price:
+          type: number
+        dailyProfitRate:
+          type: number
+        durationDays:
+          type: integer
+        maxPurchases:
+          type: ["integer", "null"]
+        isActive:
+          type: boolean
+        description:
+          type: ["string", "null"]
+      required: [name, price, dailyProfitRate, durationDays, isActive]
+
+    TaskInput:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum: [check_in, watch_video, visit_website, share_link]
+        reward:
+          type: number
+        link:
+          type: ["string", "null"]
+        isActive:
+          type: boolean
+      required: [title, description, type, reward, isActive]
+
+    BannerInput:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+        title:
+          type: ["string", "null"]
+        link:
+          type: ["string", "null"]
+        isActive:
+          type: boolean
+        order:
+          type: integer
+      required: [imageUrl, isActive, order]
+
+    PaymentMethodInput:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [jazzcash, easypaisa, usdt_trc20, usdt_bep20, bank]
+        accountNumber:
+          type: string
+        accountTitle:
+          type: string
+        isActive:
+          type: boolean
+      required: [name, type, accountNumber, accountTitle, isActive]
+
+    SystemSettingsInput:
+      type: object
+      properties:
+        siteName:
+          type: string
+        withdrawalFeePercent:
+          type: number
+        minDeposit:
+          type: number
+        minWithdrawal:
+          type: number
+        referralLevel1Rate:
+          type: number
+        referralLevel2Rate:
+          type: number
+        referralLevel3Rate:
+          type: number
+        maintenanceMode:
+          type: boolean
