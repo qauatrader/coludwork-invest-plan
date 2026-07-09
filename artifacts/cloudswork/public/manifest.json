@@ -4,8 +4,8 @@
   "description": "Earn daily profits by investing in solar energy plans.",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#0a0f0d",
-  "theme_color": "#FF3C00",
+  "background_color": "#0A0D15",
+  "theme_color": "#E4B856",
   "orientation": "portrait",
   "icons": [
     {

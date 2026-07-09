@@ -203,14 +203,19 @@ export default function DashboardPage() {
               <div className="flex-1 bg-secondary/50 border border-foreground/5 rounded-xl px-4 py-3 font-mono text-xs text-muted-foreground truncate tracking-wider">
                 {dashboard?.referralLink || "Loading..."}
               </div>
-              <button 
-                onClick={copyReferral} 
+              <button
+                onClick={copyReferral}
                 className="bg-foreground text-background hover:bg-primary/90 rounded-xl px-4 py-3 text-xs font-semibold uppercase tracking-wider transition-colors active:scale-95"
               >
                 Copy
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Install App */}
+        <div className="px-5 mb-8 animate-stagger-4">
+          <InstallAppButton />
         </div>
 
         {/* Recent Transactions */}
@@ -225,7 +230,7 @@ export default function DashboardPage() {
           </div>
           
           <div className="glass-card rounded-[1.5rem] p-2">
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-foreground/5">
               {isLoading ? (
                 Array(3).fill(0).map((_, i) => (
                   <div key={i} className="flex items-center gap-4 p-3">
