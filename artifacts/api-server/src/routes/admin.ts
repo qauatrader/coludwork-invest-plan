@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { db, usersTable, plansTable, depositsTable, withdrawalsTable, transactionsTable, tasksTable, supportMessagesTable, systemSettingsTable, bannersTable, notificationsTable, sessionsTable, paymentMethodsTable } from "@workspace/db";
-import { eq, desc, count, sum, gte, and } from "drizzle-orm";
+import { eq, desc, count, sum, gte, and, sql } from "drizzle-orm";
 import { authenticateToken, requireAdmin, hashPassword, generateReferralCode, formatUser } from "../lib/auth";
 import { distributeReferralCommissions } from "../lib/commissions";
 
@@ -193,32 +193,62 @@ router.get("/deposits", async (req, res) => {
 router.post("/deposits/:id/approve", async (req, res) => {
   const id = parseInt(req.params.id);
   const { notes } = req.body ?? {};
-  const deps = await db.select().from(depositsTable).where(eq(depositsTable.id, id)).limit(1);
-  if (!deps.length) { res.status(404).json({ error: "Not found" }); return; }
-  const dep = deps[0];
-  await db.update(depositsTable).set({ status: "approved", notes: notes ?? null }).where(eq(depositsTable.id, id));
+  if (!Number.isFinite(id)) { res.status(400).json({ error: "Invalid deposit id" }); return; }
 
-  // Credit user deposit balance
-  const users = await db.select().from(usersTable).where(eq(usersTable.id, dep.userId)).limit(1);
-  const newBalance = parseFloat(users[0].depositBalance ?? "0") + parseFloat(dep.amount);
-  await db.update(usersTable).set({ depositBalance: String(newBalance) }).where(eq(usersTable.id, dep.userId));
+  try {
+    const result = await db.transaction(async (tx) => {
+      // Lock deposit row to prevent concurrent approval/rejection
+      const deps = await tx.select().from(depositsTable).where(eq(depositsTable.id, id)).for("update").limit(1);
+      if (!deps.length) return { error: "Not found", status: 404 };
+      const dep = deps[0];
 
-  // Record transaction
-  await db.insert(transactionsTable).values({
-    userId: dep.userId, type: "deposit", amount: dep.amount,
-    description: `Deposit approved via ${dep.paymentMethod}`, status: "completed",
-  });
+      // Idempotency: already approved
+      if (dep.status === "approved") return { deposit: dep };
 
-  // Notify user
-  await db.insert(notificationsTable).values({
-    userId: dep.userId, title: "Deposit Approved", message: `Your deposit of ${dep.amount} PKR has been approved.`, type: "deposit_approved",
-  });
+      // Can only approve pending deposits
+      if (dep.status !== "pending") {
+        return { error: `Deposit is already ${dep.status}`, status: 409 };
+      }
 
-  // Distribute referral commissions to upline (L1/L2/L3)
-  await distributeReferralCommissions(db, dep.userId, parseFloat(dep.amount), "deposit");
+      // Lock user row and credit atomically
+      await tx.select().from(usersTable).where(eq(usersTable.id, dep.userId)).for("update").limit(1);
+      await tx.update(usersTable)
+        .set({ depositBalance: sql`${usersTable.depositBalance} + ${dep.amount}` })
+        .where(eq(usersTable.id, dep.userId));
 
-  const [updated] = await db.select().from(depositsTable).where(eq(depositsTable.id, id));
-  res.json(fmtDeposit(updated));
+      // Mark deposit approved
+      await tx.update(depositsTable)
+        .set({ status: "approved", notes: notes ?? null })
+        .where(eq(depositsTable.id, id));
+
+      // Record transaction
+      await tx.insert(transactionsTable).values({
+        userId: dep.userId, type: "deposit", amount: dep.amount,
+        description: `Deposit approved via ${dep.paymentMethod}`, status: "completed",
+      });
+
+      // Notify user
+      await tx.insert(notificationsTable).values({
+        userId: dep.userId, title: "Deposit Approved", message: `Your deposit of ${dep.amount} PKR has been approved.`, type: "deposit_approved",
+      });
+
+      // Distribute referral commissions to upline (L1/L2/L3)
+      await distributeReferralCommissions(tx, dep.userId, parseFloat(dep.amount), "deposit");
+
+      const [updated] = await tx.select().from(depositsTable).where(eq(depositsTable.id, id));
+      return { deposit: updated };
+    });
+
+    if ("error" in result) {
+      res.status(result.status as number).json({ error: result.error });
+      return;
+    }
+
+    res.json(fmtDeposit(result.deposit));
+  } catch (err) {
+    console.error("Deposit approval failed", err);
+    res.status(500).json({ error: "Deposit approval failed. Please try again." });
+  }
 });
 
 // POST /admin/deposits/:id/reject

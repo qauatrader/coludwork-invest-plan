@@ -43,10 +43,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (error) {
-      // Token is invalid or expired
-      localStorage.removeItem(TOKEN_KEY);
-      setToken(null);
-      setUser(null);
+      const status = (error as any)?.status;
+      // Only clear session on explicit auth failures; keep it on transient network/server errors
+      if (status === 401 || status === 403) {
+        localStorage.removeItem(TOKEN_KEY);
+        setToken(null);
+        setUser(null);
+      }
     }
   }, [token, data, error, queryLoading]);
 
