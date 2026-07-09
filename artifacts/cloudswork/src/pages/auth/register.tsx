@@ -2,18 +2,16 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useRegister } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
-import { useTheme } from "@/lib/theme";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Sun, Eye, EyeOff, Moon } from "lucide-react";
+import { Eye, EyeOff, Lock, Phone, User, KeyRound } from "lucide-react";
 
 export default function RegisterPage() {
   const [, setLocation] = useLocation();
   const { login } = useAuth();
   const { toast } = useToast();
-  const { theme, toggleTheme } = useTheme();
   const [phone, setPhone] = useState("");
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
@@ -40,7 +38,7 @@ export default function RegisterPage() {
       },
       onError: (err: any) => {
         toast({
-          title: "Registration failed",
+          title: "Application Denied",
           description: err?.data?.error || "Could not create account",
           variant: "destructive",
         });
@@ -52,8 +50,8 @@ export default function RegisterPage() {
     e.preventDefault();
     if (password !== confirmPassword) {
       toast({
-        title: "Passwords do not match",
-        description: "Please make sure both passwords are the same",
+        title: "Keys do not match",
+        description: "Please make sure both private keys are the same",
         variant: "destructive",
       });
       return;
@@ -70,130 +68,137 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-background">
-      {/* Theme toggle */}
-      <div className="absolute top-4 right-4">
-        <button
-          onClick={toggleTheme}
-          className="w-9 h-9 rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
-        >
-          {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-        </button>
-      </div>
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-background relative overflow-hidden py-12">
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
 
-      <div className="w-full max-w-sm space-y-8">
-        <div className="text-center space-y-2">
-          <div className="flex items-center justify-center mb-4">
-            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center border border-primary/30 overflow-hidden">
-              <img src="/vip-logo.png" alt="CloudsWork VIP" className="w-11 h-11 object-contain" />
+      <div className="w-full max-w-sm space-y-10 relative z-10 animate-stagger-1">
+        <div className="text-center space-y-4">
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-20 h-20 rounded-full vip-gradient flex items-center justify-center p-[2px] shadow-2xl">
+              <div className="w-full h-full bg-background rounded-full flex items-center justify-center font-serif font-bold text-3xl text-primary">
+                CW
+              </div>
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-foreground">CloudsWork</h1>
-          <p className="text-muted-foreground text-sm">Create your account</p>
+          <h1 className="text-3xl font-serif font-semibold text-foreground tracking-tight">Membership</h1>
+          <p className="text-muted-foreground/80 text-sm tracking-wide">Apply for private access</p>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl p-6 space-y-5">
-          <h2 className="text-lg font-semibold text-foreground">Get Started</h2>
-
+        <div className="glass-card rounded-[2rem] p-8 space-y-6">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="phone" className="text-sm">Phone Number</Label>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="+92 300 1234567"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                required
-                className="bg-secondary/50"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="nickname" className="text-sm">Nickname</Label>
-              <Input
-                id="nickname"
-                placeholder="Your display name"
-                value={nickname}
-                onChange={e => setNickname(e.target.value)}
-                required
-                className="bg-secondary/50"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="password" className="text-sm">Password</Label>
+            <div className="space-y-2">
+              <Label htmlFor="phone" className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">Phone Number</Label>
               <div className="relative">
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="+92 300 1234567"
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
+                  required
+                  className="bg-background/50 border-white/10 pl-11 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 transition-all font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="nickname" className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">Alias</Label>
+              <div className="relative">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+                <Input
+                  id="nickname"
+                  placeholder="Your display name"
+                  value={nickname}
+                  onChange={e => setNickname(e.target.value)}
+                  required
+                  className="bg-background/50 border-white/10 pl-11 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 transition-all font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">Private Key</Label>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Create a password"
+                  placeholder="Create a strong key"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   required
-                  className="bg-secondary/50 pr-10"
+                  className="bg-background/50 border-white/10 pl-11 pr-11 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 transition-all font-medium"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="confirmPassword" className="text-sm">Confirm Password</Label>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">Verify Key</Label>
               <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
                 <Input
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Repeat your password"
+                  placeholder="Repeat your key"
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
                   required
-                  className="bg-secondary/50 pr-10"
+                  className="bg-background/50 border-white/10 pl-11 pr-11 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 transition-all font-medium"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
                 >
                   {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="referral" className="text-sm">Referral Code (optional)</Label>
-              <Input
-                id="referral"
-                placeholder="Enter referral code"
-                value={referralCode}
-                onChange={e => setReferralCode(e.target.value)}
-                readOnly={!!prefilledRef}
-                className={`bg-secondary/50 ${prefilledRef ? "text-primary font-medium" : ""}`}
-              />
+            <div className="space-y-2">
+              <Label htmlFor="referral" className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">Invitation Code</Label>
+              <div className="relative">
+                <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+                <Input
+                  id="referral"
+                  placeholder="Optional"
+                  value={referralCode}
+                  onChange={e => setReferralCode(e.target.value)}
+                  readOnly={!!prefilledRef}
+                  className={`bg-background/50 border-white/10 pl-11 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 transition-all font-medium ${prefilledRef ? "text-primary border-primary/30" : ""}`}
+                />
+              </div>
               {prefilledRef && (
-                <p className="text-xs text-primary">Referral code applied automatically</p>
+                <p className="text-[10px] text-primary tracking-wide">Invitation code verified</p>
               )}
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90"
+              className="w-full h-12 mt-2 rounded-xl vip-gradient text-background font-bold text-sm tracking-widest uppercase shadow-xl hover:shadow-primary/20 hover:scale-[0.98] transition-all duration-300 border-none"
               disabled={registerMutation.isPending}
             >
-              {registerMutation.isPending ? "Creating account..." : "Create Account"}
+              {registerMutation.isPending ? "Processing..." : "Submit Application"}
             </Button>
           </form>
 
-          <div className="text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link href="/login" className="text-primary font-medium">
-              Login
-            </Link>
+          <div className="text-center pt-2">
+            <p className="text-sm text-muted-foreground">
+              Already a member?{" "}
+              <Link href="/login" className="text-primary font-semibold hover:text-primary/80 transition-colors">
+                Authenticate
+              </Link>
+            </p>
           </div>
         </div>
       </div>

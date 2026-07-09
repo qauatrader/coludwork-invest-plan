@@ -11,20 +11,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { getGetWalletQueryKey, getGetDepositsQueryKey, getGetWithdrawalsQueryKey, getGetDashboardQueryKey } from "@workspace/api-client-react";
-import { Wallet, ArrowDownCircle, ArrowUpCircle, Clock, CheckCircle, XCircle, Paperclip, Image, X } from "lucide-react";
+import { Wallet, ArrowDownRight, ArrowUpRight, Clock, CheckCircle2, XCircle, Paperclip, Image as ImageIcon, X } from "lucide-react";
 import { useSearch } from "wouter";
 
 function StatusBadge({ status }: { status: string }) {
   const config = {
-    pending: { icon: Clock, class: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20" },
-    approved: { icon: CheckCircle, class: "bg-primary/10 text-primary border-primary/20" },
-    completed: { icon: CheckCircle, class: "bg-primary/10 text-primary border-primary/20" },
-    rejected: { icon: XCircle, class: "bg-red-500/10 text-red-400 border-red-500/20" },
-    failed: { icon: XCircle, class: "bg-red-500/10 text-red-400 border-red-500/20" },
-  }[status] || { icon: Clock, class: "bg-secondary text-muted-foreground border-border" };
+    pending: { icon: Clock, class: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20" },
+    approved: { icon: CheckCircle2, class: "text-primary bg-primary/10 border-primary/20" },
+    completed: { icon: CheckCircle2, class: "text-primary bg-primary/10 border-primary/20" },
+    rejected: { icon: XCircle, class: "text-red-400 bg-red-500/10 border-red-500/20" },
+    failed: { icon: XCircle, class: "text-red-400 bg-red-500/10 border-red-500/20" },
+  }[status] || { icon: Clock, class: "text-muted-foreground bg-secondary border-border" };
   const Icon = config.icon;
   return (
-    <Badge className={`${config.class} flex items-center gap-1 capitalize`}>
+    <Badge variant="outline" className={`${config.class} flex items-center gap-1.5 px-2.5 py-0.5 rounded-full capitalize text-[10px] tracking-wider font-semibold`}>
       <Icon className="w-3 h-3" /> {status}
     </Badge>
   );
@@ -45,14 +45,14 @@ function DepositTab() {
   const createDeposit = useCreateDeposit({
     mutation: {
       onSuccess: () => {
-        toast({ title: "Deposit submitted!", description: "Your deposit is under review" });
+        toast({ title: "Funds Transferred", description: "Your deposit is pending verification" });
         setAmount(""); setMethod(""); setSlipFile(null); setSlipPreview(null);
         queryClient.invalidateQueries({ queryKey: getGetDepositsQueryKey() });
         queryClient.invalidateQueries({ queryKey: getGetWalletQueryKey() });
         queryClient.invalidateQueries({ queryKey: getGetDashboardQueryKey() });
       },
       onError: (err: any) => {
-        toast({ title: "Failed", description: err?.data?.error || "Deposit failed", variant: "destructive" });
+        toast({ title: "Transfer Failed", description: err?.data?.error || "Unable to process deposit", variant: "destructive" });
       },
     },
   });
@@ -95,21 +95,22 @@ function DepositTab() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 animate-stagger-2">
       {selectedMethod && (
-        <div className="bg-primary/5 border border-primary/20 rounded-xl p-4">
-          <p className="text-xs text-muted-foreground mb-1">Send payment to:</p>
-          <p className="font-semibold text-foreground">{selectedMethod.name}</p>
+        <div className="glass-card rounded-2xl p-5 border border-primary/20 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-xl" />
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground/80 font-semibold mb-1">Transfer Destination</p>
+          <p className="font-serif text-lg font-semibold text-foreground tracking-tight">{selectedMethod.name}</p>
           <p className="text-sm text-muted-foreground mt-0.5">{selectedMethod.accountTitle}</p>
-          <p className="text-primary font-mono text-sm mt-1 break-all">{selectedMethod.accountNumber}</p>
+          <p className="text-primary font-mono text-base font-medium mt-2 break-all bg-background/50 inline-block px-3 py-1 rounded-lg border border-primary/10">{selectedMethod.accountNumber}</p>
         </div>
       )}
 
-      <div className="space-y-1.5">
-        <Label className="text-sm">Payment Method</Label>
+      <div className="space-y-2">
+        <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Payment Method</Label>
         <Select value={method} onValueChange={setMethod}>
-          <SelectTrigger className="bg-secondary/50">
-            <SelectValue placeholder="Select payment method" />
+          <SelectTrigger className="bg-background/50 border-white/10 h-12 rounded-xl focus:ring-primary/20">
+            <SelectValue placeholder="Select funding source" />
           </SelectTrigger>
           <SelectContent>
             {methods?.map(m => (
@@ -119,21 +120,20 @@ function DepositTab() {
         </Select>
       </div>
 
-      <div className="space-y-1.5">
-        <Label className="text-sm">Amount (PKR)</Label>
+      <div className="space-y-2">
+        <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Amount (PKR)</Label>
         <Input
           type="number"
-          placeholder="Enter amount"
+          placeholder="Enter transfer amount"
           value={amount}
           onChange={e => setAmount(e.target.value)}
-          className="bg-secondary/50"
+          className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium"
         />
-        <p className="text-xs text-muted-foreground">Minimum deposit: Rs. {minDeposit.toLocaleString()}</p>
+        <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Minimum required: Rs. {minDeposit.toLocaleString()}</p>
       </div>
 
-      {/* Deposit Slip Upload */}
-      <div className="space-y-1.5">
-        <Label className="text-sm">Payment Slip (screenshot/receipt)</Label>
+      <div className="space-y-2">
+        <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Payment Receipt</Label>
         <input
           ref={fileInputRef}
           type="file"
@@ -142,38 +142,42 @@ function DepositTab() {
           onChange={handleFileChange}
         />
         {slipPreview ? (
-          <div className="relative rounded-xl overflow-hidden border border-primary/30 bg-secondary/30">
-            <img src={slipPreview} alt="Payment slip" className="w-full max-h-48 object-contain" />
+          <div className="relative rounded-2xl overflow-hidden border border-primary/30 bg-background/50 p-2">
+            <img src={slipPreview} alt="Receipt" className="w-full max-h-48 object-contain rounded-xl" />
             <button
               type="button"
               onClick={() => { setSlipFile(null); setSlipPreview(null); }}
-              className="absolute top-2 right-2 w-6 h-6 bg-black/60 rounded-full flex items-center justify-center text-white"
+              className="absolute top-4 right-4 w-8 h-8 bg-background/80 backdrop-blur-md rounded-full flex items-center justify-center text-foreground hover:bg-destructive hover:text-destructive-foreground transition-colors border border-white/10"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         ) : (
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="w-full border-2 border-dashed border-border rounded-xl p-4 flex flex-col items-center gap-2 text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors"
+            className="w-full border border-dashed border-white/20 bg-background/30 rounded-2xl p-6 flex flex-col items-center gap-3 text-muted-foreground hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
           >
-            <Paperclip className="w-5 h-5" />
-            <span className="text-xs">Tap to attach payment slip</span>
-            <span className="text-xs opacity-60">PNG, JPG up to 5MB</span>
+            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+              <Paperclip className="w-5 h-5 text-primary" />
+            </div>
+            <div className="text-center">
+              <span className="text-sm font-medium block text-foreground">Attach Receipt Image</span>
+              <span className="text-[10px] uppercase tracking-wider opacity-60 mt-1 block">JPG, PNG under 5MB</span>
+            </div>
           </button>
         )}
       </div>
 
       <Button
-        className="w-full bg-primary hover:bg-primary/90"
+        className="w-full h-12 rounded-xl vip-gradient text-background font-bold text-sm tracking-widest uppercase shadow-xl hover:shadow-primary/20 hover:scale-[0.98] transition-all duration-300 border-none"
         onClick={handleSubmit}
         disabled={!amount || !method || createDeposit.isPending}
       >
-        {createDeposit.isPending ? "Submitting..." : "Submit Deposit"}
+        {createDeposit.isPending ? "Processing..." : "Initiate Transfer"}
       </Button>
 
-      <div className="mt-4">
+      <div className="pt-6 border-t border-white/5">
         <DepositHistory />
       </div>
     </div>
@@ -184,23 +188,28 @@ function DepositHistory() {
   const { data: deposits, isLoading } = useGetDeposits();
   return (
     <div>
-      <h3 className="text-sm font-medium text-foreground mb-2">Deposit History</h3>
-      <div className="space-y-2">
-        {isLoading ? Array(2).fill(0).map((_, i) => <Skeleton key={i} className="h-14 rounded-xl" />) :
-          deposits?.length === 0 ? <p className="text-sm text-muted-foreground text-center py-4">No deposits yet</p> :
+      <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">Transfer History</h3>
+      <div className="space-y-3">
+        {isLoading ? Array(2).fill(0).map((_, i) => <Skeleton key={i} className="h-16 rounded-2xl bg-secondary" />) :
+          deposits?.length === 0 ? <p className="text-sm text-muted-foreground/60 text-center py-6 font-medium">No prior transfers</p> :
           deposits?.map(d => (
-            <div key={d.id} className="bg-card border border-border rounded-xl p-3 flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-foreground">Rs.{d.amount.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">{d.paymentMethod} • {new Date(d.createdAt).toLocaleDateString()}</p>
+            <div key={d.id} className="glass-card border border-white/5 rounded-2xl p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                  <ArrowDownRight className="w-4 h-4 text-blue-400" strokeWidth={2} />
+                </div>
+                <div>
+                  <p className="text-base font-semibold text-foreground tracking-tight">Rs. {d.amount.toLocaleString()}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{d.paymentMethod} • {new Date(d.createdAt).toLocaleDateString(undefined, {month:'short', day:'numeric'})}</p>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-2">
+                <StatusBadge status={d.status} />
                 {d.voucherUrl && (
-                  <a href={d.voucherUrl} target="_blank" rel="noopener noreferrer" title="View slip">
-                    <Image className="w-4 h-4 text-primary" />
+                  <a href={d.voucherUrl} target="_blank" rel="noopener noreferrer" className="text-[10px] uppercase tracking-wider text-primary hover:underline flex items-center gap-1">
+                    <ImageIcon className="w-3 h-3" /> View Receipt
                   </a>
                 )}
-                <StatusBadge status={d.status} />
               </div>
             </div>
           ))
@@ -225,14 +234,14 @@ function WithdrawTab() {
   const createWithdrawal = useCreateWithdrawal({
     mutation: {
       onSuccess: () => {
-        toast({ title: "Withdrawal requested!", description: "Your request is under review" });
+        toast({ title: "Withdrawal Requested", description: "Funds will be dispatched after review" });
         setAmount(""); setWalletType(""); setAccountTitle(""); setIban("");
         queryClient.invalidateQueries({ queryKey: getGetWithdrawalsQueryKey() });
         queryClient.invalidateQueries({ queryKey: getGetWalletQueryKey() });
         queryClient.invalidateQueries({ queryKey: getGetDashboardQueryKey() });
       },
       onError: (err: any) => {
-        toast({ title: "Failed", description: err?.data?.error || "Withdrawal failed", variant: "destructive" });
+        toast({ title: "Request Failed", description: err?.data?.error || "Withdrawal failed", variant: "destructive" });
       },
     },
   });
@@ -242,90 +251,94 @@ function WithdrawTab() {
   const net = amt - fee;
 
   return (
-    <div className="space-y-4">
-      <div className="bg-card border border-border rounded-xl p-4">
-        <p className="text-xs text-muted-foreground">Available Balance</p>
-        <p className="text-2xl font-bold text-primary">
-          Rs.{(wallet?.withdrawBalance || 0).toLocaleString()}
+    <div className="space-y-6 animate-stagger-2">
+      <div className="glass-card rounded-[2rem] p-6 relative overflow-hidden text-center">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 mix-blend-overlay"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-primary/10 rounded-full blur-2xl" />
+        <p className="text-xs uppercase tracking-widest text-muted-foreground/80 font-semibold mb-2 relative z-10">Available Liquidity</p>
+        <p className="text-4xl font-serif font-semibold vip-text-gradient tracking-tight relative z-10">
+          Rs. {(wallet?.withdrawBalance || 0).toLocaleString()}
         </p>
       </div>
 
-      <div className="space-y-1.5">
-        <Label className="text-sm">Withdrawal Method</Label>
+      <div className="space-y-2">
+        <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Destination Method</Label>
         <Select value={walletType} onValueChange={setWalletType}>
-          <SelectTrigger className="bg-secondary/50">
-            <SelectValue placeholder="Select method" />
+          <SelectTrigger className="bg-background/50 border-white/10 h-12 rounded-xl focus:ring-primary/20">
+            <SelectValue placeholder="Select destination" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="bank">Bank Transfer (Preferred)</SelectItem>
             <SelectItem value="jazzcash">JazzCash</SelectItem>
             <SelectItem value="easypaisa">EasyPaisa</SelectItem>
-            <SelectItem value="bank">Bank Transfer</SelectItem>
             <SelectItem value="usdt_trc20">USDT TRC20</SelectItem>
             <SelectItem value="usdt_bep20">USDT BEP20</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      <div className="space-y-1.5">
-        <Label className="text-sm">Account Title / Name</Label>
+      <div className="space-y-2">
+        <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Account Holder</Label>
         <Input
-          placeholder="Account holder name"
+          placeholder="Legal name on account"
           value={accountTitle}
           onChange={e => setAccountTitle(e.target.value)}
-          className="bg-secondary/50"
+          className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium"
         />
       </div>
 
-      <div className="space-y-1.5">
-        <Label className="text-sm">Account Number / IBAN / Address</Label>
+      <div className="space-y-2">
+        <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Account ID / IBAN</Label>
         <Input
-          placeholder="Enter account details"
+          placeholder="Identifier or address"
           value={iban}
           onChange={e => setIban(e.target.value)}
-          className="bg-secondary/50"
+          className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium"
         />
       </div>
 
-      <div className="space-y-1.5">
-        <Label className="text-sm">Amount (PKR)</Label>
+      <div className="space-y-2">
+        <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Withdrawal Amount</Label>
         <Input
           type="number"
-          placeholder="Enter amount"
+          placeholder="Amount in PKR"
           value={amount}
           onChange={e => setAmount(e.target.value)}
-          className="bg-secondary/50"
+          className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 text-lg font-semibold text-primary"
         />
-        <p className="text-xs text-muted-foreground">Min: Rs. {minWithdrawal.toLocaleString()} • Fee: {feePercent}%</p>
+        <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Min: Rs. {minWithdrawal.toLocaleString()} • Fee: {feePercent}%</p>
       </div>
 
       {amt > 0 && (
-        <div className="bg-secondary/50 rounded-xl p-3 space-y-1 text-sm">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Amount</span>
-            <span>Rs.{amt.toLocaleString()}</span>
+        <div className="bg-secondary/40 border border-white/5 rounded-2xl p-4 space-y-2 text-sm">
+          <div className="flex justify-between items-center">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Gross Amount</span>
+            <span className="font-medium text-foreground">Rs. {amt.toLocaleString()}</span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Fee ({feePercent}%)</span>
-            <span className="text-red-400">-Rs.{fee.toFixed(0)}</span>
+          <div className="flex justify-between items-center">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Service Fee ({feePercent}%)</span>
+            <span className="font-medium text-red-400">- Rs. {fee.toFixed(0)}</span>
           </div>
-          <div className="flex justify-between font-semibold border-t border-border pt-1">
-            <span>You receive</span>
-            <span className="text-primary">Rs.{net.toFixed(0)}</span>
+          <div className="flex justify-between items-center border-t border-white/10 pt-2 mt-2">
+            <span className="text-xs uppercase tracking-widest text-foreground font-bold">Net Disbursement</span>
+            <span className="font-serif text-lg font-bold text-primary">Rs. {net.toFixed(0)}</span>
           </div>
         </div>
       )}
 
       <Button
-        className="w-full bg-primary hover:bg-primary/90"
+        className="w-full h-12 rounded-xl vip-gradient text-background font-bold text-sm tracking-widest uppercase shadow-xl hover:shadow-primary/20 hover:scale-[0.98] transition-all duration-300 border-none"
         onClick={() => createWithdrawal.mutate({
           data: { amount: amt, walletType, accountTitle, iban }
         })}
         disabled={!amount || !walletType || !accountTitle || !iban || createWithdrawal.isPending}
       >
-        {createWithdrawal.isPending ? "Processing..." : "Request Withdrawal"}
+        {createWithdrawal.isPending ? "Processing..." : "Request Disbursement"}
       </Button>
 
-      <WithdrawHistory />
+      <div className="pt-6 border-t border-white/5">
+        <WithdrawHistory />
+      </div>
     </div>
   );
 }
@@ -334,15 +347,20 @@ function WithdrawHistory() {
   const { data: withdrawals, isLoading } = useGetWithdrawals();
   return (
     <div>
-      <h3 className="text-sm font-medium text-foreground mb-2">Withdrawal History</h3>
-      <div className="space-y-2">
-        {isLoading ? Array(2).fill(0).map((_, i) => <Skeleton key={i} className="h-14 rounded-xl" />) :
-          withdrawals?.length === 0 ? <p className="text-sm text-muted-foreground text-center py-4">No withdrawals yet</p> :
+      <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">Disbursement History</h3>
+      <div className="space-y-3">
+        {isLoading ? Array(2).fill(0).map((_, i) => <Skeleton key={i} className="h-16 rounded-2xl bg-secondary" />) :
+          withdrawals?.length === 0 ? <p className="text-sm text-muted-foreground/60 text-center py-6 font-medium">No prior disbursements</p> :
           withdrawals?.map(w => (
-            <div key={w.id} className="bg-card border border-border rounded-xl p-3 flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-foreground">Rs.{w.amount.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">{w.walletType} • {new Date(w.createdAt).toLocaleDateString()}</p>
+            <div key={w.id} className="glass-card border border-white/5 rounded-2xl p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
+                  <ArrowUpRight className="w-4 h-4 text-orange-400" strokeWidth={2} />
+                </div>
+                <div>
+                  <p className="text-base font-semibold text-foreground tracking-tight">Rs. {w.amount.toLocaleString()}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{w.walletType} • {new Date(w.createdAt).toLocaleDateString(undefined, {month:'short', day:'numeric'})}</p>
+                </div>
               </div>
               <StatusBadge status={w.status} />
             </div>
@@ -357,37 +375,46 @@ function HistoryTab() {
   const { data, isLoading } = useGetTransactions({ page: 1 });
   const types: Record<string, string> = {
     deposit: "text-blue-400", withdrawal: "text-orange-400", profit: "text-primary",
-    commission: "text-yellow-400", purchase: "text-red-400", bonus: "text-green-400",
+    commission: "text-primary", purchase: "text-white/60", bonus: "text-primary",
+  };
+  const bgTypes: Record<string, string> = {
+    deposit: "bg-blue-500/10 border-blue-500/20", withdrawal: "bg-orange-500/10 border-orange-500/20", profit: "bg-primary/10 border-primary/20",
+    commission: "bg-primary/10 border-primary/20", purchase: "bg-white/5 border-white/10", bonus: "bg-primary/10 border-primary/20",
   };
 
   return (
-    <div className="space-y-2">
-      {isLoading ? Array(5).fill(0).map((_, i) => <Skeleton key={i} className="h-14 rounded-xl" />) :
+    <div className="space-y-3 animate-stagger-2">
+      {isLoading ? Array(5).fill(0).map((_, i) => <Skeleton key={i} className="h-16 rounded-2xl bg-secondary" />) :
         data?.transactions?.length === 0 ? (
-          <div className="text-center py-10 text-muted-foreground">
-            <Clock className="w-10 h-10 mx-auto mb-2 opacity-30" />
-            <p>No transactions yet</p>
+          <div className="text-center py-12 text-muted-foreground glass-card rounded-[1.5rem]">
+            <Clock className="w-10 h-10 mx-auto mb-3 opacity-20" />
+            <p className="font-serif text-lg text-foreground">No Ledger Entries</p>
+            <p className="text-xs mt-1">Your transaction history will appear here.</p>
           </div>
         ) :
-        data?.transactions?.map(tx => (
-          <div key={tx.id} className="bg-card border border-border rounded-xl p-3 flex items-center gap-3">
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center bg-secondary ${types[tx.type] || "text-muted-foreground"}`}>
-              {["deposit", "profit", "commission", "bonus"].includes(tx.type)
-                ? <ArrowDownCircle className="w-4 h-4" />
-                : <ArrowUpCircle className="w-4 h-4" />}
+        data?.transactions?.map(tx => {
+          const isPositive = ["deposit", "profit", "commission", "bonus", "refund"].includes(tx.type);
+          return (
+            <div key={tx.id} className="glass-card border border-white/5 rounded-2xl p-4 flex items-center gap-4 hover:bg-white/5 transition-colors">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${bgTypes[tx.type] || "bg-secondary border-white/5"}`}>
+                {isPositive ? <ArrowDownRight className={`w-4 h-4 ${types[tx.type] || "text-muted-foreground"}`} strokeWidth={2} />
+                            : <ArrowUpRight className={`w-4 h-4 ${types[tx.type] || "text-muted-foreground"}`} strokeWidth={2} />}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-foreground capitalize tracking-tight">{tx.type}</p>
+                <p className="text-[11px] text-muted-foreground/80 truncate mt-0.5">{tx.description}</p>
+              </div>
+              <div className="text-right">
+                <p className={`text-sm font-semibold tracking-tight ${isPositive ? "text-foreground" : "text-white/60"}`}>
+                  {isPositive ? "+" : "-"}Rs. {tx.amount.toLocaleString()}
+                </p>
+                <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wider mt-0.5">
+                  {new Date(tx.createdAt).toLocaleDateString(undefined, {month:'short', day:'numeric'})}
+                </p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground capitalize">{tx.type}</p>
-              <p className="text-xs text-muted-foreground truncate">{tx.description}</p>
-            </div>
-            <div className="text-right">
-              <p className={`text-sm font-semibold ${["deposit","profit","commission","bonus","refund"].includes(tx.type) ? "text-primary" : "text-red-400"}`}>
-                {["deposit","profit","commission","bonus","refund"].includes(tx.type) ? "+" : "-"}Rs.{tx.amount.toLocaleString()}
-              </p>
-              <p className="text-xs text-muted-foreground">{new Date(tx.createdAt).toLocaleDateString()}</p>
-            </div>
-          </div>
-        ))
+          );
+        })
       }
     </div>
   );
@@ -400,41 +427,41 @@ export default function WalletPage() {
 
   return (
     <AppLayout>
-      <div className="max-w-lg mx-auto px-4 pt-4 pb-4">
-        <div className="mb-5">
-          <h1 className="text-xl font-bold text-foreground">Wallet</h1>
-          <p className="text-sm text-muted-foreground">Manage your funds</p>
+      <div className="max-w-lg mx-auto px-5 pt-8 pb-6">
+        <div className="mb-6 animate-stagger-1">
+          <h1 className="text-3xl font-serif font-semibold text-foreground tracking-tight">Ledger</h1>
+          <p className="text-sm text-muted-foreground/80 tracking-wide mt-1">Manage your liquidity and distributions</p>
         </div>
 
         {/* Balance Cards */}
-        <div className="grid grid-cols-2 gap-3 mb-5">
+        <div className="grid grid-cols-2 gap-3 mb-6 animate-stagger-1">
           {[
-            { label: "Deposit Balance", value: wallet?.depositBalance, icon: ArrowDownCircle, color: "text-blue-400 bg-blue-500/10" },
-            { label: "Withdraw Balance", value: wallet?.withdrawBalance, icon: ArrowUpCircle, color: "text-orange-400 bg-orange-500/10" },
-            { label: "Profit Balance", value: wallet?.profitBalance, icon: Wallet, color: "text-primary bg-primary/10" },
-            { label: "Commission", value: wallet?.commissionBalance, icon: Wallet, color: "text-yellow-400 bg-yellow-500/10" },
-          ].map(({ label, value, icon: Icon, color }) => (
-            <div key={label} className="bg-card border border-border rounded-xl p-3">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-2 ${color}`}>
-                <Icon className="w-4 h-4" />
+            { label: "Deposit Balance", value: wallet?.depositBalance, icon: ArrowDownRight, color: "text-blue-400", bg: "bg-blue-500/10 border-blue-500/20" },
+            { label: "Withdraw Balance", value: wallet?.withdrawBalance, icon: ArrowUpRight, color: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/20" },
+            { label: "Profit Balance", value: wallet?.profitBalance, icon: Wallet, color: "text-primary", bg: "bg-primary/10 border-primary/20" },
+            { label: "Commission", value: wallet?.commissionBalance, icon: Wallet, color: "text-primary", bg: "bg-primary/10 border-primary/20" },
+          ].map(({ label, value, icon: Icon, color, bg }) => (
+            <div key={label} className="glass-card rounded-2xl p-4 relative overflow-hidden group">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-3 border ${bg}`}>
+                <Icon className={`w-4 h-4 ${color}`} strokeWidth={2} />
               </div>
-              <p className="text-xs text-muted-foreground">{label}</p>
-              {isLoading ? <Skeleton className="h-5 w-20 mt-1" /> :
-                <p className="text-sm font-bold text-foreground">Rs.{(value || 0).toLocaleString()}</p>}
+              <p className="text-[10px] text-muted-foreground/80 uppercase tracking-widest font-semibold">{label}</p>
+              {isLoading ? <Skeleton className="h-6 w-24 mt-1 bg-secondary" /> :
+                <p className="text-lg font-serif font-semibold text-foreground mt-1 tracking-tight">Rs. {(value || 0).toLocaleString()}</p>}
             </div>
           ))}
         </div>
 
-        <Tabs defaultValue={tab}>
-          <TabsList className="w-full mb-4">
-            <TabsTrigger value="deposit" className="flex-1">
-              <ArrowDownCircle className="w-4 h-4 mr-1.5" /> Deposit
+        <Tabs defaultValue={tab} className="animate-stagger-2">
+          <TabsList className="w-full mb-6 bg-secondary/50 p-1.5 rounded-xl border border-white/5 h-auto">
+            <TabsTrigger value="deposit" className="flex-1 py-2.5 rounded-lg text-[10px] font-semibold tracking-widest uppercase data-[state=active]:bg-card data-[state=active]:text-primary transition-all">
+              Deposit
             </TabsTrigger>
-            <TabsTrigger value="withdraw" className="flex-1">
-              <ArrowUpCircle className="w-4 h-4 mr-1.5" /> Withdraw
+            <TabsTrigger value="withdraw" className="flex-1 py-2.5 rounded-lg text-[10px] font-semibold tracking-widest uppercase data-[state=active]:bg-card data-[state=active]:text-primary transition-all">
+              Withdraw
             </TabsTrigger>
-            <TabsTrigger value="history" className="flex-1">
-              <Clock className="w-4 h-4 mr-1.5" /> History
+            <TabsTrigger value="history" className="flex-1 py-2.5 rounded-lg text-[10px] font-semibold tracking-widest uppercase data-[state=active]:bg-card data-[state=active]:text-primary transition-all">
+              History
             </TabsTrigger>
           </TabsList>
 
