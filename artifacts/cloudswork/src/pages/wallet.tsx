@@ -109,7 +109,7 @@ function DepositTab() {
       <div className="space-y-2">
         <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Payment Method</Label>
         <Select value={method} onValueChange={setMethod}>
-          <SelectTrigger className="bg-background/50 border-white/10 h-12 rounded-xl focus:ring-primary/20">
+          <SelectTrigger className="bg-background/50 border-foreground/10 h-12 rounded-xl focus:ring-primary/20">
             <SelectValue placeholder="Select funding source" />
           </SelectTrigger>
           <SelectContent>
@@ -127,7 +127,7 @@ function DepositTab() {
           placeholder="Enter transfer amount"
           value={amount}
           onChange={e => setAmount(e.target.value)}
-          className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium"
+          className="bg-background/50 border-foreground/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium"
         />
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Minimum required: Rs. {minDeposit.toLocaleString()}</p>
       </div>
@@ -147,7 +147,7 @@ function DepositTab() {
             <button
               type="button"
               onClick={() => { setSlipFile(null); setSlipPreview(null); }}
-              className="absolute top-4 right-4 w-8 h-8 bg-background/80 backdrop-blur-md rounded-full flex items-center justify-center text-foreground hover:bg-destructive hover:text-destructive-foreground transition-colors border border-white/10"
+              className="absolute top-4 right-4 w-8 h-8 bg-background/80 backdrop-blur-md rounded-full flex items-center justify-center text-foreground hover:bg-destructive hover:text-destructive-foreground transition-colors border border-foreground/10"
             >
               <X className="w-4 h-4" />
             </button>
@@ -177,7 +177,7 @@ function DepositTab() {
         {createDeposit.isPending ? "Processing..." : "Initiate Transfer"}
       </Button>
 
-      <div className="pt-6 border-t border-white/5">
+      <div className="pt-6 border-t border-foreground/5">
         <DepositHistory />
       </div>
     </div>
@@ -193,7 +193,7 @@ function DepositHistory() {
         {isLoading ? Array(2).fill(0).map((_, i) => <Skeleton key={i} className="h-16 rounded-2xl bg-secondary" />) :
           deposits?.length === 0 ? <p className="text-sm text-muted-foreground/60 text-center py-6 font-medium">No prior transfers</p> :
           deposits?.map(d => (
-            <div key={d.id} className="glass-card border border-white/5 rounded-2xl p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+            <div key={d.id} className="glass-card border border-foreground/5 rounded-2xl p-4 flex items-center justify-between hover:bg-foreground/5 transition-colors">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
                   <ArrowDownRight className="w-4 h-4 text-blue-400" strokeWidth={2} />
@@ -264,7 +264,7 @@ function WithdrawTab() {
       <div className="space-y-2">
         <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Destination Method</Label>
         <Select value={walletType} onValueChange={setWalletType}>
-          <SelectTrigger className="bg-background/50 border-white/10 h-12 rounded-xl focus:ring-primary/20">
+          <SelectTrigger className="bg-background/50 border-foreground/10 h-12 rounded-xl focus:ring-primary/20">
             <SelectValue placeholder="Select destination" />
           </SelectTrigger>
           <SelectContent>
@@ -283,7 +283,7 @@ function WithdrawTab() {
           placeholder="Legal name on account"
           value={accountTitle}
           onChange={e => setAccountTitle(e.target.value)}
-          className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium"
+          className="bg-background/50 border-foreground/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium"
         />
       </div>
 
@@ -293,7 +293,7 @@ function WithdrawTab() {
           placeholder="Identifier or address"
           value={iban}
           onChange={e => setIban(e.target.value)}
-          className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium"
+          className="bg-background/50 border-foreground/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium"
         />
       </div>
 
@@ -304,13 +304,13 @@ function WithdrawTab() {
           placeholder="Amount in PKR"
           value={amount}
           onChange={e => setAmount(e.target.value)}
-          className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 text-lg font-semibold text-primary"
+          className="bg-background/50 border-foreground/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 text-lg font-semibold text-primary"
         />
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Min: Rs. {minWithdrawal.toLocaleString()} • Fee: {feePercent}%</p>
       </div>
 
       {amt > 0 && (
-        <div className="bg-secondary/40 border border-white/5 rounded-2xl p-4 space-y-2 text-sm">
+        <div className="bg-secondary/40 border border-foreground/5 rounded-2xl p-4 space-y-2 text-sm">
           <div className="flex justify-between items-center">
             <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Gross Amount</span>
             <span className="font-medium text-foreground">Rs. {amt.toLocaleString()}</span>
@@ -319,7 +319,7 @@ function WithdrawTab() {
             <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Service Fee ({feePercent}%)</span>
             <span className="font-medium text-red-400">- Rs. {fee.toFixed(0)}</span>
           </div>
-          <div className="flex justify-between items-center border-t border-white/10 pt-2 mt-2">
+          <div className="flex justify-between items-center border-t border-foreground/10 pt-2 mt-2">
             <span className="text-xs uppercase tracking-widest text-foreground font-bold">Net Disbursement</span>
             <span className="font-serif text-lg font-bold text-primary">Rs. {net.toFixed(0)}</span>
           </div>
@@ -336,7 +336,7 @@ function WithdrawTab() {
         {createWithdrawal.isPending ? "Processing..." : "Request Disbursement"}
       </Button>
 
-      <div className="pt-6 border-t border-white/5">
+      <div className="pt-6 border-t border-foreground/5">
         <WithdrawHistory />
       </div>
     </div>
@@ -352,7 +352,7 @@ function WithdrawHistory() {
         {isLoading ? Array(2).fill(0).map((_, i) => <Skeleton key={i} className="h-16 rounded-2xl bg-secondary" />) :
           withdrawals?.length === 0 ? <p className="text-sm text-muted-foreground/60 text-center py-6 font-medium">No prior disbursements</p> :
           withdrawals?.map(w => (
-            <div key={w.id} className="glass-card border border-white/5 rounded-2xl p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+            <div key={w.id} className="glass-card border border-foreground/5 rounded-2xl p-4 flex items-center justify-between hover:bg-foreground/5 transition-colors">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
                   <ArrowUpRight className="w-4 h-4 text-orange-400" strokeWidth={2} />
@@ -375,11 +375,11 @@ function HistoryTab() {
   const { data, isLoading } = useGetTransactions({ page: 1 });
   const types: Record<string, string> = {
     deposit: "text-blue-400", withdrawal: "text-orange-400", profit: "text-primary",
-    commission: "text-primary", purchase: "text-white/60", bonus: "text-primary",
+    commission: "text-primary", purchase: "text-foreground/60", bonus: "text-primary",
   };
   const bgTypes: Record<string, string> = {
     deposit: "bg-blue-500/10 border-blue-500/20", withdrawal: "bg-orange-500/10 border-orange-500/20", profit: "bg-primary/10 border-primary/20",
-    commission: "bg-primary/10 border-primary/20", purchase: "bg-white/5 border-white/10", bonus: "bg-primary/10 border-primary/20",
+    commission: "bg-primary/10 border-primary/20", purchase: "bg-foreground/5 border-foreground/10", bonus: "bg-primary/10 border-primary/20",
   };
 
   return (
@@ -395,8 +395,8 @@ function HistoryTab() {
         data?.transactions?.map(tx => {
           const isPositive = ["deposit", "profit", "commission", "bonus", "refund"].includes(tx.type);
           return (
-            <div key={tx.id} className="glass-card border border-white/5 rounded-2xl p-4 flex items-center gap-4 hover:bg-white/5 transition-colors">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${bgTypes[tx.type] || "bg-secondary border-white/5"}`}>
+            <div key={tx.id} className="glass-card border border-foreground/5 rounded-2xl p-4 flex items-center gap-4 hover:bg-foreground/5 transition-colors">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${bgTypes[tx.type] || "bg-secondary border-foreground/5"}`}>
                 {isPositive ? <ArrowDownRight className={`w-4 h-4 ${types[tx.type] || "text-muted-foreground"}`} strokeWidth={2} />
                             : <ArrowUpRight className={`w-4 h-4 ${types[tx.type] || "text-muted-foreground"}`} strokeWidth={2} />}
               </div>
@@ -405,7 +405,7 @@ function HistoryTab() {
                 <p className="text-[11px] text-muted-foreground/80 truncate mt-0.5">{tx.description}</p>
               </div>
               <div className="text-right">
-                <p className={`text-sm font-semibold tracking-tight ${isPositive ? "text-foreground" : "text-white/60"}`}>
+                <p className={`text-sm font-semibold tracking-tight ${isPositive ? "text-foreground" : "text-foreground/60"}`}>
                   {isPositive ? "+" : "-"}Rs. {tx.amount.toLocaleString()}
                 </p>
                 <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wider mt-0.5">
@@ -453,7 +453,7 @@ export default function WalletPage() {
         </div>
 
         <Tabs defaultValue={tab} className="animate-stagger-2">
-          <TabsList className="w-full mb-6 bg-secondary/50 p-1.5 rounded-xl border border-white/5 h-auto">
+          <TabsList className="w-full mb-6 bg-secondary/50 p-1.5 rounded-xl border border-foreground/5 h-auto">
             <TabsTrigger value="deposit" className="flex-1 py-2.5 rounded-lg text-[10px] font-semibold tracking-widest uppercase data-[state=active]:bg-card data-[state=active]:text-primary transition-all">
               Deposit
             </TabsTrigger>

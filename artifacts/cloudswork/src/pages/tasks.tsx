@@ -57,11 +57,11 @@ function TaskCard({ task, delay }: { task: any; delay: string }) {
 
   return (
     <div className={`glass-card rounded-[1.5rem] p-5 flex items-center gap-4 transition-all duration-300 relative overflow-hidden group ${
-      task.isCompleted ? "opacity-60 grayscale-[30%]" : "hover:bg-white/5"
+      task.isCompleted ? "opacity-60 grayscale-[30%]" : "hover:bg-foreground/5"
     } ${delay}`}>
       {task.isCompleted && <div className="absolute inset-0 bg-background/40 z-10 pointer-events-none" />}
       
-      <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border ${taskColors[task.type] || "bg-secondary border-white/5"}`}>
+      <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border ${taskColors[task.type] || "bg-secondary border-foreground/5"}`}>
         <Icon className="w-5 h-5" strokeWidth={1.5} />
       </div>
 
@@ -82,7 +82,7 @@ function TaskCard({ task, delay }: { task: any; delay: string }) {
         size="sm"
         className={`shrink-0 h-10 px-4 rounded-xl uppercase tracking-widest text-[10px] font-bold transition-all duration-300 relative z-20 ${
           task.isCompleted
-            ? "bg-secondary text-muted-foreground border border-white/5 shadow-none"
+            ? "bg-secondary text-muted-foreground border border-foreground/5 shadow-none"
             : "vip-gradient text-background shadow-lg hover:shadow-primary/20 hover:scale-[0.98] border-none"
         }`}
         disabled={task.isCompleted || complete.isPending}
@@ -130,12 +130,12 @@ export default function TasksPage() {
             </div>
           </div>
 
-          <div className="h-2 bg-background rounded-full overflow-hidden border border-white/5 relative z-10">
+          <div className="h-2 bg-background rounded-full overflow-hidden border border-foreground/5 relative z-10">
             <div
               className="h-full vip-gradient rounded-full transition-all duration-1000 relative"
               style={{ width: tasks?.length ? `${(completedCount / tasks.length) * 100}%` : "0%" }}
             >
-              <div className="absolute inset-0 bg-white/20 w-full animate-[shimmer_2s_infinite]"></div>
+              <div className="absolute inset-0 bg-foreground/20 w-full animate-[shimmer_2s_infinite]"></div>
             </div>
           </div>
 

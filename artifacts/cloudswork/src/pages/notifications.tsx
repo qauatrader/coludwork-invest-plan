@@ -40,7 +40,7 @@ export default function NotificationsPage() {
     <AppLayout hideNav>
       <div className="max-w-lg mx-auto px-5 pt-8 pb-6">
         <div className="flex items-center gap-4 mb-8 animate-stagger-1">
-          <button onClick={() => setLocation(-1 as any)} className="w-12 h-12 bg-secondary border border-white/5 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors">
+          <button onClick={() => setLocation(-1 as any)} className="w-12 h-12 bg-secondary border border-foreground/5 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors">
             <ArrowLeft className="w-5 h-5 text-foreground" strokeWidth={1.5} />
           </button>
           <div className="flex-1 min-w-0">
@@ -51,7 +51,7 @@ export default function NotificationsPage() {
             <button
               onClick={() => markAll.mutate()}
               disabled={markAll.isPending}
-              className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5 h-12 px-4 rounded-xl border border-white/5 bg-secondary disabled:opacity-50"
+              className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5 h-12 px-4 rounded-xl border border-foreground/5 bg-secondary disabled:opacity-50"
             >
               <CheckCheck className="w-3 h-3" strokeWidth={2} /> Clear
             </button>
@@ -73,13 +73,13 @@ export default function NotificationsPage() {
                 key={n.id}
                 className={cn(
                   "glass-card rounded-[1.5rem] p-5 flex gap-4 cursor-pointer transition-all duration-300 relative overflow-hidden group",
-                  !n.isRead ? "border-primary/20 bg-primary/5 hover:bg-primary/10" : "hover:bg-white/5"
+                  !n.isRead ? "border-primary/20 bg-primary/5 hover:bg-primary/10" : "hover:bg-foreground/5"
                 )}
                 onClick={() => !n.isRead && markRead.mutate({ id: n.id })}
               >
                 {!n.isRead && <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />}
                 
-                <div className="w-12 h-12 rounded-xl bg-secondary border border-white/5 flex items-center justify-center shrink-0 text-xl group-hover:scale-110 transition-transform duration-300">
+                <div className="w-12 h-12 rounded-xl bg-secondary border border-foreground/5 flex items-center justify-center shrink-0 text-xl group-hover:scale-110 transition-transform duration-300">
                   {notifIcons[n.type] || "🔔"}
                 </div>
                 <div className="flex-1 min-w-0 py-0.5">

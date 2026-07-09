@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, Lock, Phone } from "lucide-react";
+import { Eye, EyeOff, Lock, Phone, Sun, Moon } from "lucide-react";
 
 export default function LoginPage() {
   const [, setLocation] = useLocation();
   const { login } = useAuth();
   const { toast } = useToast();
+  const { theme, toggleTheme } = useTheme();
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -48,6 +49,15 @@ export default function LoginPage() {
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
 
+      <button
+        type="button"
+        onClick={toggleTheme}
+        className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-secondary/80 border border-border flex items-center justify-center text-foreground hover:bg-secondary transition-colors"
+        aria-label="Toggle theme"
+      >
+        {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+      </button>
+
       <div className="w-full max-w-sm space-y-10 relative z-10 animate-stagger-1">
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center mb-6">
@@ -74,7 +84,7 @@ export default function LoginPage() {
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
                   required
-                  className="bg-background/50 border-white/10 pl-11 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 transition-all font-medium"
+                  className="bg-background/50 border-foreground/10 pl-11 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 transition-all font-medium"
                 />
               </div>
             </div>
@@ -90,7 +100,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   required
-                  className="bg-background/50 border-white/10 pl-11 pr-11 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 transition-all font-medium"
+                  className="bg-background/50 border-foreground/10 pl-11 pr-11 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 transition-all font-medium"
                 />
                 <button
                   type="button"

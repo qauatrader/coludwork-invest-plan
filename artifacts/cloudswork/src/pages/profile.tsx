@@ -18,7 +18,7 @@ import { Link, useLocation } from "wouter";
 
 function StatRow({ label, value, color = "" }: { label: string; value: string; color?: string }) {
   return (
-    <div className="flex items-center justify-between py-4 border-b border-white/5 last:border-0 hover:bg-white/5 px-2 -mx-2 rounded-lg transition-colors">
+    <div className="flex items-center justify-between py-4 border-b border-foreground/5 last:border-0 hover:bg-foreground/5 px-2 -mx-2 rounded-lg transition-colors">
       <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">{label}</span>
       <span className={`text-base font-serif font-bold ${color || "text-foreground"}`}>{value}</span>
     </div>
@@ -79,7 +79,7 @@ function ProfileTab() {
             </div>
           </div>
           {!editing && (
-            <button onClick={startEdit} className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center border border-white/5 hover:bg-white/10 transition-colors">
+            <button onClick={startEdit} className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center border border-foreground/5 hover:bg-foreground/10 transition-colors">
               <Edit3 className="w-4 h-4 text-foreground" strokeWidth={1.5} />
             </button>
           )}
@@ -91,14 +91,14 @@ function ProfileTab() {
           <h3 className="font-serif text-lg font-semibold text-foreground tracking-tight">Identity & Details</h3>
           <div className="space-y-2">
             <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Alias</Label>
-            <Input value={nickname} onChange={e => setNickname(e.target.value)} className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" />
+            <Input value={nickname} onChange={e => setNickname(e.target.value)} className="bg-background/50 border-foreground/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" />
           </div>
           <div className="space-y-2">
             <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Email (optional)</Label>
-            <Input type="email" value={email} onChange={e => setEmail(e.target.value)} className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" />
+            <Input type="email" value={email} onChange={e => setEmail(e.target.value)} className="bg-background/50 border-foreground/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" />
           </div>
           <div className="flex gap-3 pt-2">
-            <Button variant="outline" className="flex-1 h-12 rounded-xl text-xs uppercase tracking-widest font-bold border-white/10 bg-secondary hover:bg-white/5" onClick={() => setEditing(false)}>Cancel</Button>
+            <Button variant="outline" className="flex-1 h-12 rounded-xl text-xs uppercase tracking-widest font-bold border-foreground/10 bg-secondary hover:bg-foreground/5" onClick={() => setEditing(false)}>Cancel</Button>
             <Button
               className="flex-1 h-12 rounded-xl vip-gradient text-background text-xs uppercase tracking-widest font-bold border-none shadow-lg hover:shadow-primary/20"
               onClick={() => update.mutate({ data: { nickname, email: email || undefined } })}
@@ -164,15 +164,15 @@ function SecurityTab() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Current Key</Label>
-          <Input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" required />
+          <Input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="bg-background/50 border-foreground/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" required />
         </div>
         <div className="space-y-2">
           <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">New Key</Label>
-          <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" required />
+          <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="bg-background/50 border-foreground/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" required />
         </div>
         <div className="space-y-2">
           <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Verify New Key</Label>
-          <Input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" required />
+          <Input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="bg-background/50 border-foreground/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" required />
         </div>
         <Button type="submit" className="w-full h-12 mt-2 rounded-xl vip-gradient text-background font-bold text-sm tracking-widest uppercase shadow-xl hover:shadow-primary/20 hover:scale-[0.98] transition-all duration-300 border-none" disabled={changePassword.isPending}>
           {changePassword.isPending ? "Updating..." : "Update Key"}
@@ -201,7 +201,7 @@ export default function ProfilePage() {
           </div>
           <div className="flex gap-3">
             <Link href="/support">
-              <button className="w-12 h-12 bg-secondary border border-white/10 rounded-full flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all shadow-sm">
+              <button className="w-12 h-12 bg-secondary border border-foreground/10 rounded-full flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all shadow-sm">
                 <Headphones className="w-5 h-5" strokeWidth={1.5} />
               </button>
             </Link>
@@ -209,7 +209,7 @@ export default function ProfilePage() {
         </div>
 
         <Tabs defaultValue="profile" className="animate-stagger-1">
-          <TabsList className="w-full mb-6 bg-secondary/50 p-1.5 rounded-xl border border-white/5 h-auto">
+          <TabsList className="w-full mb-6 bg-secondary/50 p-1.5 rounded-xl border border-foreground/5 h-auto">
             <TabsTrigger value="profile" className="flex-1 py-2.5 rounded-lg text-xs font-semibold tracking-widest uppercase data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md transition-all">
                Identity
             </TabsTrigger>

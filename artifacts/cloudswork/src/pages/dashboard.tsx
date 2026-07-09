@@ -19,7 +19,7 @@ function StatCard({ label, value, icon: Icon, colorClass, delay }: {
   return (
     <div className={cn("glass-card rounded-2xl p-4 flex items-center gap-4 relative overflow-hidden group", delay)}>
       <div className="absolute right-0 top-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
-      <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-white/5 shadow-inner", colorClass)}>
+      <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-foreground/5 shadow-inner", colorClass)}>
         <Icon className="w-5 h-5" strokeWidth={1.5} />
       </div>
       <div className="min-w-0 flex-1 relative z-10">
@@ -37,7 +37,7 @@ function BalanceCard({ label, amount, icon: Icon, href, delay }: {
     <div className={cn("glass-card rounded-2xl p-4 relative overflow-hidden group hover:border-primary/30 transition-all duration-300", delay)}>
       <div className="absolute right-0 bottom-0 w-16 h-16 bg-primary/5 rounded-full blur-xl group-hover:bg-primary/10 transition-colors" />
       <div className="flex items-center justify-between mb-3">
-        <div className="w-8 h-8 rounded-full bg-secondary/80 flex items-center justify-center border border-white/5">
+        <div className="w-8 h-8 rounded-full bg-secondary/80 flex items-center justify-center border border-foreground/5">
           <Icon className="w-4 h-4 text-primary" strokeWidth={2} />
         </div>
         <ChevronRight className="w-4 h-4 text-muted-foreground/50 group-hover:text-primary transition-colors" />
@@ -61,7 +61,7 @@ function txTypeColor(type: string) {
     case "withdrawal": return "text-orange-400";
     case "profit": return "text-primary";
     case "commission": return "text-primary";
-    case "purchase": return "text-white/60";
+    case "purchase": return "text-foreground/60";
     default: return "text-muted-foreground";
   }
 }
@@ -72,8 +72,8 @@ function txTypeBg(type: string) {
     case "withdrawal": return "bg-orange-500/10 border-orange-500/20";
     case "profit": return "bg-primary/10 border-primary/20";
     case "commission": return "bg-primary/10 border-primary/20";
-    case "purchase": return "bg-white/5 border-white/10";
-    default: return "bg-secondary border-white/5";
+    case "purchase": return "bg-foreground/5 border-foreground/10";
+    default: return "bg-secondary border-foreground/5";
   }
 }
 
@@ -200,7 +200,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <div className="flex-1 bg-secondary/50 border border-white/5 rounded-xl px-4 py-3 font-mono text-xs text-muted-foreground truncate tracking-wider">
+              <div className="flex-1 bg-secondary/50 border border-foreground/5 rounded-xl px-4 py-3 font-mono text-xs text-muted-foreground truncate tracking-wider">
                 {dashboard?.referralLink || "Loading..."}
               </div>
               <button 
@@ -246,7 +246,7 @@ export default function DashboardPage() {
                   const isPositive = txSign(tx.type) === "+";
                   const TxIcon = isPositive ? ArrowDownRight : ArrowUpRight;
                   return (
-                    <div key={tx.id} className="flex items-center gap-4 p-3 hover:bg-white/5 rounded-xl transition-colors cursor-pointer group">
+                    <div key={tx.id} className="flex items-center gap-4 p-3 hover:bg-foreground/5 rounded-xl transition-colors cursor-pointer group">
                       <div className={cn("w-10 h-10 rounded-full flex items-center justify-center shrink-0 border transition-transform duration-300 group-hover:scale-110", txTypeBg(tx.type))}>
                         <TxIcon className={cn("w-4 h-4", txTypeColor(tx.type))} strokeWidth={2} />
                       </div>
@@ -255,7 +255,7 @@ export default function DashboardPage() {
                         <p className="text-[11px] text-muted-foreground/80 truncate mt-0.5">{tx.description}</p>
                       </div>
                       <div className="text-right">
-                        <span className={cn("text-sm font-semibold block tracking-tight", isPositive ? "text-foreground" : "text-white/60")}>
+                        <span className={cn("text-sm font-semibold block tracking-tight", isPositive ? "text-foreground" : "text-foreground/60")}>
                           {txSign(tx.type)}Rs. {tx.amount.toLocaleString()}
                         </span>
                         <span className="text-[10px] text-muted-foreground/60 uppercase tracking-wider">

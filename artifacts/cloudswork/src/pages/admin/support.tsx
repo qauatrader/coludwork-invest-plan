@@ -85,7 +85,7 @@ export default function AdminSupport() {
                   </div>
                 </div>
                 {ticket.unreadCount > 0 && (
-                  <span className="mt-1 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs bg-primary text-white">
+                  <span className="mt-1 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs bg-primary text-primary-foreground">
                     {ticket.unreadCount}
                   </span>
                 )}
@@ -123,11 +123,11 @@ export default function AdminSupport() {
                     <div className={cn(
                       "max-w-[75%] px-4 py-2.5 rounded-2xl text-sm",
                       msg.isAdmin
-                        ? "bg-primary text-white rounded-tr-sm"
+                        ? "bg-primary text-primary-foreground rounded-tr-sm"
                         : "bg-secondary text-foreground rounded-tl-sm"
                     )}>
                       <p>{msg.message}</p>
-                      <p className={cn("text-xs mt-1", msg.isAdmin ? "text-white/70" : "text-muted-foreground")}>
+                      <p className={cn("text-xs mt-1", msg.isAdmin ? "text-foreground/70" : "text-muted-foreground")}>
                         {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                       </p>
                     </div>

@@ -50,7 +50,7 @@ function PlanCard({ plan, delay }: { plan: any; delay: string }) {
 
       <p className="text-sm text-muted-foreground/90 leading-relaxed relative z-10">{plan.description}</p>
 
-      <div className="grid grid-cols-3 gap-3 bg-secondary/50 rounded-xl p-4 border border-white/5 relative z-10">
+      <div className="grid grid-cols-3 gap-3 bg-secondary/50 rounded-xl p-4 border border-foreground/5 relative z-10">
         <div className="flex flex-col items-center">
           <p className="text-[10px] text-muted-foreground/70 uppercase tracking-wider font-semibold">Allocation</p>
           <p className="text-sm font-semibold text-foreground mt-1">Rs. {plan.price.toLocaleString()}</p>
@@ -90,7 +90,7 @@ function PurchasedPlanCard({ pp, delay }: { pp: any; delay: string }) {
       
       <div className="flex items-center justify-between relative z-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-white/5 bg-secondary">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-foreground/5 bg-secondary">
             <ShieldCheck className="w-5 h-5 text-primary" strokeWidth={1.5} />
           </div>
           <div>
@@ -112,14 +112,14 @@ function PurchasedPlanCard({ pp, delay }: { pp: any; delay: string }) {
           <span className="text-muted-foreground/80 font-medium uppercase tracking-wider text-[10px]">Term Progress</span>
           <span className="text-foreground font-semibold">{pp.daysRemaining} days left</span>
         </div>
-        <div className="h-1.5 bg-background rounded-full overflow-hidden border border-white/5">
+        <div className="h-1.5 bg-background rounded-full overflow-hidden border border-foreground/5">
           <div className="h-full vip-gradient rounded-full transition-all duration-1000 relative" style={{ width: `${progress}%` }}>
-            <div className="absolute inset-0 bg-white/20 w-full animate-[shimmer_2s_infinite]"></div>
+            <div className="absolute inset-0 bg-foreground/20 w-full animate-[shimmer_2s_infinite]"></div>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-white/5 relative z-10">
+      <div className="flex items-center justify-between pt-2 border-t border-foreground/5 relative z-10">
         <div>
           <p className="text-[10px] text-muted-foreground/70 uppercase tracking-wider font-semibold">Daily Yield</p>
           <p className="text-sm font-semibold text-primary mt-0.5">Rs. {(plan.price * plan.dailyProfitRate / 100).toFixed(0)}</p>
@@ -152,7 +152,7 @@ export default function PlansPage() {
         </div>
 
         <Tabs defaultValue="available" className="animate-stagger-2">
-          <TabsList className="w-full mb-6 bg-secondary/50 p-1.5 rounded-xl border border-white/5 h-auto">
+          <TabsList className="w-full mb-6 bg-secondary/50 p-1.5 rounded-xl border border-foreground/5 h-auto">
             <TabsTrigger value="available" className="flex-1 py-2.5 rounded-lg text-xs font-semibold tracking-widest uppercase data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md transition-all">
               Opportunities
             </TabsTrigger>

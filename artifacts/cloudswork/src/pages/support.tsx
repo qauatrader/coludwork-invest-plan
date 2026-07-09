@@ -48,8 +48,8 @@ export default function SupportPage() {
       <div className="max-w-lg mx-auto flex flex-col h-screen bg-background relative">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
         
-        <div className="flex items-center gap-4 px-5 py-5 border-b border-white/5 bg-background/80 backdrop-blur-xl z-10">
-          <button onClick={() => setLocation(-1 as any)} className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center hover:bg-white/10 transition-colors border border-white/5">
+        <div className="flex items-center gap-4 px-5 py-5 border-b border-foreground/5 bg-background/80 backdrop-blur-xl z-10">
+          <button onClick={() => setLocation(-1 as any)} className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center hover:bg-foreground/10 transition-colors border border-foreground/5">
             <ArrowLeft className="w-4 h-4 text-foreground" strokeWidth={1.5} />
           </button>
           <div className="flex items-center gap-3">
@@ -97,10 +97,10 @@ export default function SupportPage() {
                 <div className={cn(
                   "max-w-[75%] px-5 py-3 rounded-2xl text-[13px] leading-relaxed relative overflow-hidden",
                   msg.isAdmin
-                    ? "glass-card text-foreground rounded-tl-sm border border-white/5"
+                    ? "glass-card text-foreground rounded-tl-sm border border-foreground/5"
                     : "vip-gradient text-background rounded-tr-sm font-medium shadow-lg"
                 )}>
-                  {!msg.isAdmin && <div className="absolute inset-0 bg-white/10 mix-blend-overlay pointer-events-none" />}
+                  {!msg.isAdmin && <div className="absolute inset-0 bg-foreground/10 mix-blend-overlay pointer-events-none" />}
                   <p className="relative z-10">{msg.message}</p>
                   <p className={cn("text-[9px] uppercase tracking-widest mt-2 relative z-10 font-semibold", msg.isAdmin ? "text-muted-foreground" : "text-background/70")}>
                     {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -112,14 +112,14 @@ export default function SupportPage() {
           <div ref={bottomRef} className="h-4" />
         </div>
 
-        <div className="px-5 py-4 border-t border-white/5 bg-background/80 backdrop-blur-xl z-10 safe-area-bottom">
+        <div className="px-5 py-4 border-t border-foreground/5 bg-background/80 backdrop-blur-xl z-10 safe-area-bottom">
           <div className="flex items-center gap-3">
             <Input
               placeholder="Type your message..."
               value={text}
               onChange={e => setText(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="bg-secondary/50 border-white/5 h-12 rounded-full px-5 focus:border-primary/50 focus:ring-primary/20 text-sm font-medium flex-1"
+              className="bg-secondary/50 border-foreground/5 h-12 rounded-full px-5 focus:border-primary/50 focus:ring-primary/20 text-sm font-medium flex-1"
             />
             <Button
               size="icon"
