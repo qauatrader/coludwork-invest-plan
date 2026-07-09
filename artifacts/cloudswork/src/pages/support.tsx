@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQueryClient } from "@tanstack/react-query";
 import { getGetSupportMessagesQueryKey } from "@workspace/api-client-react";
-import { ArrowLeft, Send, MessageSquare } from "lucide-react";
+import { ArrowLeft, Send, Headphones } from "lucide-react";
 import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 
@@ -45,34 +45,41 @@ export default function SupportPage() {
 
   return (
     <AppLayout hideNav>
-      <div className="max-w-lg mx-auto flex flex-col h-screen">
-        <div className="flex items-center gap-3 px-4 py-4 border-b border-border bg-card">
-          <button onClick={() => setLocation("/")} className="w-9 h-9 bg-secondary rounded-xl flex items-center justify-center">
-            <ArrowLeft className="w-4 h-4" />
+      <div className="max-w-lg mx-auto flex flex-col h-screen bg-background relative">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+        
+        <div className="flex items-center gap-4 px-5 py-5 border-b border-white/5 bg-background/80 backdrop-blur-xl z-10">
+          <button onClick={() => setLocation(-1 as any)} className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center hover:bg-white/10 transition-colors border border-white/5">
+            <ArrowLeft className="w-4 h-4 text-foreground" strokeWidth={1.5} />
           </button>
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center">
-              <MessageSquare className="w-4 h-4 text-white" />
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full vip-gradient p-[1px]">
+              <div className="w-full h-full bg-background rounded-full flex items-center justify-center">
+                <Headphones className="w-4 h-4 text-primary" strokeWidth={1.5} />
+              </div>
             </div>
             <div>
-              <p className="font-semibold text-sm text-foreground">CloudsWork Support</p>
-              <p className="text-xs text-primary">● Online</p>
+              <p className="font-serif font-semibold text-base text-foreground tracking-tight">Concierge</p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                <p className="text-[10px] uppercase tracking-widest text-primary font-bold">Online</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        <div className="flex-1 overflow-y-auto p-5 space-y-4 z-10 scroll-smooth">
           {isLoading ? (
             Array(3).fill(0).map((_, i) => (
               <div key={i} className={cn("flex", i % 2 === 0 ? "justify-start" : "justify-end")}>
-                <Skeleton className="h-12 w-48 rounded-2xl" />
+                <Skeleton className="h-14 w-64 rounded-2xl bg-secondary" />
               </div>
             ))
           ) : messages?.length === 0 ? (
-            <div className="text-center py-16 text-muted-foreground">
-              <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-30" />
-              <p className="font-medium">Start a conversation</p>
-              <p className="text-xs mt-1">Our support team will respond shortly</p>
+            <div className="text-center py-20 text-muted-foreground h-full flex flex-col items-center justify-center">
+              <Headphones className="w-12 h-12 mx-auto mb-4 opacity-20" strokeWidth={1.5} />
+              <p className="font-serif text-lg text-foreground">Private Assistance</p>
+              <p className="text-xs mt-1 tracking-wide">How may we assist with your portfolio today?</p>
             </div>
           ) : (
             messages?.map(msg => (
@@ -81,43 +88,46 @@ export default function SupportPage() {
                 className={cn("flex", msg.isAdmin ? "justify-start" : "justify-end")}
               >
                 {msg.isAdmin && (
-                  <div className="w-7 h-7 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold mr-2 mt-auto mb-1 shrink-0">
-                    CS
+                  <div className="w-8 h-8 rounded-full vip-gradient flex items-center justify-center p-[1px] mr-3 mt-auto mb-1 shrink-0">
+                    <div className="w-full h-full bg-background rounded-full flex items-center justify-center">
+                      <span className="text-[9px] font-bold text-primary font-serif">CS</span>
+                    </div>
                   </div>
                 )}
                 <div className={cn(
-                  "max-w-[75%] px-4 py-2.5 rounded-2xl text-sm",
+                  "max-w-[75%] px-5 py-3 rounded-2xl text-[13px] leading-relaxed relative overflow-hidden",
                   msg.isAdmin
-                    ? "bg-card border border-border text-foreground rounded-tl-sm"
-                    : "bg-primary text-white rounded-tr-sm"
+                    ? "glass-card text-foreground rounded-tl-sm border border-white/5"
+                    : "vip-gradient text-background rounded-tr-sm font-medium shadow-lg"
                 )}>
-                  <p>{msg.message}</p>
-                  <p className={cn("text-xs mt-1", msg.isAdmin ? "text-muted-foreground" : "text-white/70")}>
+                  {!msg.isAdmin && <div className="absolute inset-0 bg-white/10 mix-blend-overlay pointer-events-none" />}
+                  <p className="relative z-10">{msg.message}</p>
+                  <p className={cn("text-[9px] uppercase tracking-widest mt-2 relative z-10 font-semibold", msg.isAdmin ? "text-muted-foreground" : "text-background/70")}>
                     {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                   </p>
                 </div>
               </div>
             ))
           )}
-          <div ref={bottomRef} />
+          <div ref={bottomRef} className="h-4" />
         </div>
 
-        <div className="px-4 py-3 border-t border-border bg-card">
-          <div className="flex items-center gap-2">
+        <div className="px-5 py-4 border-t border-white/5 bg-background/80 backdrop-blur-xl z-10 safe-area-bottom">
+          <div className="flex items-center gap-3">
             <Input
-              placeholder="Type a message..."
+              placeholder="Type your message..."
               value={text}
               onChange={e => setText(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="bg-secondary/50 flex-1"
+              className="bg-secondary/50 border-white/5 h-12 rounded-full px-5 focus:border-primary/50 focus:ring-primary/20 text-sm font-medium flex-1"
             />
             <Button
               size="icon"
-              className="bg-primary hover:bg-primary/90 shrink-0"
+              className="w-12 h-12 rounded-full vip-gradient text-background shrink-0 border-none shadow-lg hover:shadow-primary/20 hover:scale-[0.98] transition-all"
               onClick={handleSend}
               disabled={!text.trim() || send.isPending}
             >
-              <Send className="w-4 h-4" />
+              <Send className="w-4 h-4 ml-0.5" strokeWidth={2} />
             </Button>
           </div>
         </div>

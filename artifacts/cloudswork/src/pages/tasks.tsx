@@ -16,13 +16,13 @@ const taskIcons: Record<string, any> = {
 };
 
 const taskColors: Record<string, string> = {
-  check_in: "bg-primary/10 text-primary",
-  watch_video: "bg-blue-500/10 text-blue-400",
-  visit_website: "bg-yellow-500/10 text-yellow-400",
-  share_link: "bg-purple-500/10 text-purple-400",
+  check_in: "bg-[#E4B856]/10 text-[#E4B856] border-[#E4B856]/20",
+  watch_video: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  visit_website: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+  share_link: "bg-purple-500/10 text-purple-400 border-purple-500/20",
 };
 
-function TaskCard({ task }: { task: any }) {
+function TaskCard({ task, delay }: { task: any; delay: string }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const Icon = taskIcons[task.type] || CheckSquare;
@@ -31,8 +31,8 @@ function TaskCard({ task }: { task: any }) {
     mutation: {
       onSuccess: (data) => {
         toast({
-          title: "Task completed!",
-          description: `You earned Rs.${data.reward}`,
+          title: "Bounty Claimed",
+          description: `Rs. ${data.reward} added to your portfolio`,
         });
         queryClient.invalidateQueries({ queryKey: getGetTasksQueryKey() });
         queryClient.invalidateQueries({ queryKey: getGetDashboardQueryKey() });
@@ -40,8 +40,8 @@ function TaskCard({ task }: { task: any }) {
       },
       onError: (err: any) => {
         toast({
-          title: "Already completed",
-          description: err?.data?.error || "Task already done today",
+          title: "Claim Failed",
+          description: err?.data?.error || "Task already claimed today",
           variant: "destructive",
         });
       },
@@ -56,41 +56,44 @@ function TaskCard({ task }: { task: any }) {
   };
 
   return (
-    <div className={`bg-card border rounded-xl p-4 flex items-center gap-4 transition-all ${
-      task.isCompleted ? "border-primary/30 opacity-70" : "border-border"
-    }`}>
-      <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${taskColors[task.type] || "bg-secondary"}`}>
-        <Icon className="w-5 h-5" />
+    <div className={`glass-card rounded-[1.5rem] p-5 flex items-center gap-4 transition-all duration-300 relative overflow-hidden group ${
+      task.isCompleted ? "opacity-60 grayscale-[30%]" : "hover:bg-white/5"
+    } ${delay}`}>
+      {task.isCompleted && <div className="absolute inset-0 bg-background/40 z-10 pointer-events-none" />}
+      
+      <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border ${taskColors[task.type] || "bg-secondary border-white/5"}`}>
+        <Icon className="w-5 h-5" strokeWidth={1.5} />
       </div>
 
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
-          <p className="text-sm font-semibold text-foreground">{task.title}</p>
+        <div className="flex items-center gap-2 mb-1">
+          <p className="font-serif font-semibold text-foreground tracking-tight">{task.title}</p>
           {task.isCompleted && (
-            <Badge className="bg-primary/10 text-primary border-primary/20 text-xs px-1.5 py-0">
-              Done
+            <Badge className="bg-primary/10 text-primary border-primary/20 text-[10px] uppercase tracking-widest px-2 py-0">
+              Claimed
             </Badge>
           )}
         </div>
-        <p className="text-xs text-muted-foreground">{task.description}</p>
-        <p className="text-xs font-medium text-primary mt-1">+Rs.{task.reward} reward</p>
+        <p className="text-[11px] text-muted-foreground/80 tracking-wide line-clamp-2">{task.description}</p>
+        <p className="text-xs font-semibold text-primary mt-2 tracking-tight">+ Rs. {task.reward}</p>
       </div>
 
       <Button
         size="sm"
-        className={task.isCompleted
-          ? "bg-secondary text-muted-foreground cursor-not-allowed border border-border"
-          : "bg-primary hover:bg-primary/90"
-        }
+        className={`shrink-0 h-10 px-4 rounded-xl uppercase tracking-widest text-[10px] font-bold transition-all duration-300 relative z-20 ${
+          task.isCompleted
+            ? "bg-secondary text-muted-foreground border border-white/5 shadow-none"
+            : "vip-gradient text-background shadow-lg hover:shadow-primary/20 hover:scale-[0.98] border-none"
+        }`}
         disabled={task.isCompleted || complete.isPending}
         onClick={handleComplete}
       >
         {task.isCompleted ? (
-          <CheckCircle2 className="w-4 h-4" />
+          <CheckCircle2 className="w-4 h-4" strokeWidth={2} />
         ) : complete.isPending ? (
           "..."
         ) : (
-          "Claim"
+          "Execute"
         )}
       </Button>
     </div>
@@ -106,52 +109,57 @@ export default function TasksPage() {
 
   return (
     <AppLayout>
-      <div className="max-w-lg mx-auto px-4 pt-6 pb-4">
-        <div className="mb-5">
-          <h1 className="text-xl font-bold text-foreground">Daily Tasks</h1>
-          <p className="text-sm text-muted-foreground">Complete tasks to earn bonus rewards</p>
+      <div className="max-w-lg mx-auto px-5 pt-8 pb-6">
+        <div className="mb-6 animate-stagger-1">
+          <h1 className="text-3xl font-serif font-semibold text-foreground tracking-tight">Privileges</h1>
+          <p className="text-sm text-muted-foreground/80 tracking-wide mt-1">Exclusive daily bounties for members</p>
         </div>
 
         {/* Progress */}
-        <div className="bg-card border border-border rounded-2xl p-4 mb-5">
-          <div className="flex items-center justify-between mb-3">
+        <div className="glass-card rounded-[1.5rem] p-6 mb-8 relative overflow-hidden animate-stagger-1">
+          <div className="absolute right-0 top-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
+          
+          <div className="flex items-center justify-between mb-5 relative z-10">
             <div>
-              <p className="text-sm font-medium text-foreground">Daily Progress</p>
-              <p className="text-xs text-muted-foreground">{completedCount} of {tasks?.length || 0} tasks done</p>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground/80 font-semibold mb-1">Daily Objectives</p>
+              <p className="text-sm font-serif font-medium text-foreground tracking-tight">{completedCount} of {tasks?.length || 0} Complete</p>
             </div>
             <div className="text-right">
-              <p className="text-xs text-muted-foreground">Earned today</p>
-              <p className="text-base font-bold text-primary">Rs.{earnedToday}</p>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground/80 font-semibold mb-1">Bounties Secured</p>
+              <p className="text-xl font-serif font-bold text-primary tracking-tight">Rs. {earnedToday}</p>
             </div>
           </div>
 
-          <div className="h-2 bg-secondary rounded-full overflow-hidden">
+          <div className="h-2 bg-background rounded-full overflow-hidden border border-white/5 relative z-10">
             <div
-              className="h-full bg-primary rounded-full transition-all"
+              className="h-full vip-gradient rounded-full transition-all duration-1000 relative"
               style={{ width: tasks?.length ? `${(completedCount / tasks.length) * 100}%` : "0%" }}
-            />
+            >
+              <div className="absolute inset-0 bg-white/20 w-full animate-[shimmer_2s_infinite]"></div>
+            </div>
           </div>
 
-          <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
+          <div className="flex items-center justify-between mt-3 text-[10px] uppercase tracking-widest text-muted-foreground font-semibold relative z-10">
             <span>0</span>
-            <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3" /> Resets daily at midnight
+            <span className="flex items-center gap-1.5 text-primary/80">
+              <Clock className="w-3 h-3" strokeWidth={2} /> Resets at Midnight
             </span>
-            <span>Rs.{totalReward}</span>
+            <span>Rs. {totalReward}</span>
           </div>
         </div>
 
         {/* Task list */}
-        <div className="space-y-3">
+        <div className="space-y-4">
           {isLoading ? (
-            Array(4).fill(0).map((_, i) => <Skeleton key={i} className="h-20 rounded-xl" />)
+            Array(4).fill(0).map((_, i) => <Skeleton key={i} className="h-28 rounded-[1.5rem] bg-secondary animate-stagger-2" />)
           ) : tasks?.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
-              <CheckSquare className="w-10 h-10 mx-auto mb-2 opacity-30" />
-              <p>No tasks available</p>
+            <div className="text-center py-16 text-muted-foreground glass-card rounded-[1.5rem] animate-stagger-2">
+              <CheckSquare className="w-12 h-12 mx-auto mb-4 opacity-20" />
+              <p className="font-serif text-lg text-foreground">No Active Privileges</p>
+              <p className="text-xs mt-1">Please check back tomorrow.</p>
             </div>
           ) : (
-            tasks?.map(task => <TaskCard key={task.id} task={task} />)
+            tasks?.map((task, i) => <TaskCard key={task.id} task={task} delay={`animate-stagger-${Math.min(i + 1, 4)}`} />)
           )}
         </div>
       </div>

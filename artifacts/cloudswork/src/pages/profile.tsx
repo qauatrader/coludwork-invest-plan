@@ -12,15 +12,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { getGetProfileQueryKey } from "@workspace/api-client-react";
 import {
   User, TrendingUp, ArrowDownCircle, ArrowUpCircle,
-  Award, LogOut, ShieldCheck, Edit3, Bell
+  Award, LogOut, ShieldCheck, Edit3, Bell, Headphones
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 function StatRow({ label, value, color = "" }: { label: string; value: string; color?: string }) {
   return (
-    <div className="flex items-center justify-between py-3 border-b border-border last:border-0">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className={`text-sm font-semibold ${color || "text-foreground"}`}>{value}</span>
+    <div className="flex items-center justify-between py-4 border-b border-white/5 last:border-0 hover:bg-white/5 px-2 -mx-2 rounded-lg transition-colors">
+      <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">{label}</span>
+      <span className={`text-base font-serif font-bold ${color || "text-foreground"}`}>{value}</span>
     </div>
   );
 }
@@ -36,12 +36,12 @@ function ProfileTab() {
   const update = useUpdateProfile({
     mutation: {
       onSuccess: () => {
-        toast({ title: "Profile updated!" });
+        toast({ title: "Profile updated" });
         queryClient.invalidateQueries({ queryKey: getGetProfileQueryKey() });
         setEditing(false);
       },
       onError: (err: any) => {
-        toast({ title: "Failed", description: err?.data?.error || "Update failed", variant: "destructive" });
+        toast({ title: "Update Failed", description: err?.data?.error || "Could not update profile", variant: "destructive" });
       },
     },
   });
@@ -54,62 +54,69 @@ function ProfileTab() {
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
-        <Skeleton className="h-24 rounded-xl" />
-        <Skeleton className="h-48 rounded-xl" />
+      <div className="space-y-4 animate-stagger-2">
+        <Skeleton className="h-32 rounded-[1.5rem] bg-secondary" />
+        <Skeleton className="h-64 rounded-[1.5rem] bg-secondary" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      <div className="bg-card border border-border rounded-xl p-4">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 bg-primary/10 border border-primary/30 rounded-2xl flex items-center justify-center text-2xl font-bold text-primary">
-            {profile?.nickname?.[0]?.toUpperCase() || "U"}
+    <div className="space-y-6 animate-stagger-2">
+      <div className="glass-card rounded-[1.5rem] p-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
+        <div className="flex items-center gap-5 relative z-10">
+          <div className="w-20 h-20 rounded-full vip-gradient p-[2px] shadow-2xl flex-shrink-0">
+            <div className="w-full h-full bg-background rounded-full flex items-center justify-center font-serif text-3xl font-bold text-primary border-4 border-background">
+              {profile?.nickname?.[0]?.toUpperCase() || "U"}
+            </div>
           </div>
-          <div className="flex-1">
-            <p className="text-lg font-bold text-foreground">{profile?.nickname}</p>
-            <p className="text-sm text-muted-foreground">{profile?.phone}</p>
-            <p className="text-xs text-muted-foreground">Member since {new Date(profile?.memberSince || "").toLocaleDateString()}</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-2xl font-serif font-bold text-foreground tracking-tight truncate">{profile?.nickname}</p>
+            <p className="text-[11px] text-muted-foreground/80 tracking-widest font-mono mt-1">{profile?.phone}</p>
+            <div className="inline-block px-3 py-1 bg-primary/10 border border-primary/20 rounded-full mt-2">
+              <p className="text-[10px] font-bold tracking-widest uppercase text-primary">VIP Member</p>
+            </div>
           </div>
           {!editing && (
-            <button onClick={startEdit} className="p-2 bg-secondary rounded-lg">
-              <Edit3 className="w-4 h-4 text-muted-foreground" />
+            <button onClick={startEdit} className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center border border-white/5 hover:bg-white/10 transition-colors">
+              <Edit3 className="w-4 h-4 text-foreground" strokeWidth={1.5} />
             </button>
           )}
         </div>
       </div>
 
       {editing ? (
-        <div className="bg-card border border-border rounded-xl p-4 space-y-4">
-          <h3 className="font-medium text-foreground">Edit Profile</h3>
-          <div className="space-y-1.5">
-            <Label className="text-sm">Nickname</Label>
-            <Input value={nickname} onChange={e => setNickname(e.target.value)} className="bg-secondary/50" />
+        <div className="glass-card rounded-[1.5rem] p-6 space-y-5">
+          <h3 className="font-serif text-lg font-semibold text-foreground tracking-tight">Identity & Details</h3>
+          <div className="space-y-2">
+            <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Alias</Label>
+            <Input value={nickname} onChange={e => setNickname(e.target.value)} className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" />
           </div>
-          <div className="space-y-1.5">
-            <Label className="text-sm">Email (optional)</Label>
-            <Input type="email" value={email} onChange={e => setEmail(e.target.value)} className="bg-secondary/50" />
+          <div className="space-y-2">
+            <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Email (optional)</Label>
+            <Input type="email" value={email} onChange={e => setEmail(e.target.value)} className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" />
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="flex-1" onClick={() => setEditing(false)}>Cancel</Button>
+          <div className="flex gap-3 pt-2">
+            <Button variant="outline" className="flex-1 h-12 rounded-xl text-xs uppercase tracking-widest font-bold border-white/10 bg-secondary hover:bg-white/5" onClick={() => setEditing(false)}>Cancel</Button>
             <Button
-              className="flex-1 bg-primary hover:bg-primary/90"
+              className="flex-1 h-12 rounded-xl vip-gradient text-background text-xs uppercase tracking-widest font-bold border-none shadow-lg hover:shadow-primary/20"
               onClick={() => update.mutate({ data: { nickname, email: email || undefined } })}
               disabled={update.isPending}
             >
-              Save
+              Save Changes
             </Button>
           </div>
         </div>
       ) : (
-        <div className="bg-card border border-border rounded-xl p-4">
-          <h3 className="font-medium text-foreground mb-2">Investment Stats</h3>
-          <StatRow label="Total Deposit" value={`Rs.${(profile?.totalDeposit || 0).toLocaleString()}`} color="text-blue-400" />
-          <StatRow label="Total Withdraw" value={`Rs.${(profile?.totalWithdraw || 0).toLocaleString()}`} color="text-orange-400" />
-          <StatRow label="Total Profit" value={`Rs.${(profile?.totalProfit || 0).toLocaleString()}`} color="text-primary" />
-          <StatRow label="Total Commission" value={`Rs.${(profile?.totalCommission || 0).toLocaleString()}`} color="text-yellow-400" />
+        <div className="glass-card rounded-[1.5rem] p-6">
+          <h3 className="font-serif text-lg font-semibold text-foreground tracking-tight mb-4">Portfolio Statistics</h3>
+          <div className="space-y-1">
+            <StatRow label="Total Deposits" value={`Rs. ${(profile?.totalDeposit || 0).toLocaleString()}`} color="text-foreground" />
+            <StatRow label="Total Disbursements" value={`Rs. ${(profile?.totalWithdraw || 0).toLocaleString()}`} color="text-foreground" />
+            <StatRow label="Lifetime Yield" value={`Rs. ${(profile?.totalProfit || 0).toLocaleString()}`} color="text-primary" />
+            <StatRow label="Network Royalties" value={`Rs. ${(profile?.totalCommission || 0).toLocaleString()}`} color="text-primary" />
+          </div>
         </div>
       )}
     </div>
@@ -125,11 +132,11 @@ function SecurityTab() {
   const changePassword = useChangePassword({
     mutation: {
       onSuccess: () => {
-        toast({ title: "Password changed!" });
+        toast({ title: "Private Key Updated" });
         setCurrentPassword(""); setNewPassword(""); setConfirmPassword("");
       },
       onError: (err: any) => {
-        toast({ title: "Failed", description: err?.data?.error || "Change failed", variant: "destructive" });
+        toast({ title: "Update Failed", description: err?.data?.error || "Could not change key", variant: "destructive" });
       },
     },
   });
@@ -137,33 +144,38 @@ function SecurityTab() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      toast({ title: "Passwords don't match", variant: "destructive" });
+      toast({ title: "Keys do not match", variant: "destructive" });
       return;
     }
     changePassword.mutate({ data: { currentPassword, newPassword, confirmPassword } });
   };
 
   return (
-    <div className="bg-card border border-border rounded-xl p-4 space-y-4">
-      <div className="flex items-center gap-2 mb-2">
-        <ShieldCheck className="w-5 h-5 text-primary" />
-        <h3 className="font-medium text-foreground">Change Password</h3>
+    <div className="glass-card rounded-[1.5rem] p-6 space-y-5 animate-stagger-2">
+      <div className="flex items-center gap-3 mb-2">
+        <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+          <ShieldCheck className="w-5 h-5 text-primary" strokeWidth={1.5} />
+        </div>
+        <div>
+          <h3 className="font-serif text-lg font-semibold text-foreground tracking-tight">Security</h3>
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground/80 font-medium mt-0.5">Update Private Key</p>
+        </div>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <div className="space-y-1.5">
-          <Label className="text-sm">Current Password</Label>
-          <Input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="bg-secondary/50" required />
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Current Key</Label>
+          <Input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" required />
         </div>
-        <div className="space-y-1.5">
-          <Label className="text-sm">New Password</Label>
-          <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="bg-secondary/50" required />
+        <div className="space-y-2">
+          <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">New Key</Label>
+          <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" required />
         </div>
-        <div className="space-y-1.5">
-          <Label className="text-sm">Confirm New Password</Label>
-          <Input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="bg-secondary/50" required />
+        <div className="space-y-2">
+          <Label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Verify New Key</Label>
+          <Input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="bg-background/50 border-white/10 h-12 rounded-xl focus:border-primary/50 focus:ring-primary/20 font-medium" required />
         </div>
-        <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={changePassword.isPending}>
-          {changePassword.isPending ? "Changing..." : "Change Password"}
+        <Button type="submit" className="w-full h-12 mt-2 rounded-xl vip-gradient text-background font-bold text-sm tracking-widest uppercase shadow-xl hover:shadow-primary/20 hover:scale-[0.98] transition-all duration-300 border-none" disabled={changePassword.isPending}>
+          {changePassword.isPending ? "Updating..." : "Update Key"}
         </Button>
       </form>
     </div>
@@ -181,33 +193,28 @@ export default function ProfilePage() {
 
   return (
     <AppLayout>
-      <div className="max-w-lg mx-auto px-4 pt-6 pb-4">
-        <div className="flex items-center justify-between mb-5">
+      <div className="max-w-lg mx-auto px-5 pt-8 pb-6">
+        <div className="flex items-center justify-between mb-8 animate-stagger-1">
           <div>
-            <h1 className="text-xl font-bold text-foreground">Profile</h1>
-            <p className="text-sm text-muted-foreground">Manage your account</p>
+            <h1 className="text-3xl font-serif font-semibold text-foreground tracking-tight">Profile</h1>
+            <p className="text-sm text-muted-foreground/80 tracking-wide mt-1">Manage your identity and security</p>
           </div>
-          <div className="flex gap-2">
-            <Link href="/notifications">
-              <button className="w-9 h-9 bg-card border border-border rounded-xl flex items-center justify-center">
-                <Bell className="w-4 h-4" />
-              </button>
-            </Link>
+          <div className="flex gap-3">
             <Link href="/support">
-              <button className="w-9 h-9 bg-card border border-border rounded-xl flex items-center justify-center text-xs font-bold text-primary">
-                CS
+              <button className="w-12 h-12 bg-secondary border border-white/10 rounded-full flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all shadow-sm">
+                <Headphones className="w-5 h-5" strokeWidth={1.5} />
               </button>
             </Link>
           </div>
         </div>
 
-        <Tabs defaultValue="profile">
-          <TabsList className="w-full mb-4">
-            <TabsTrigger value="profile" className="flex-1">
-              <User className="w-4 h-4 mr-1.5" /> Profile
+        <Tabs defaultValue="profile" className="animate-stagger-1">
+          <TabsList className="w-full mb-6 bg-secondary/50 p-1.5 rounded-xl border border-white/5 h-auto">
+            <TabsTrigger value="profile" className="flex-1 py-2.5 rounded-lg text-xs font-semibold tracking-widest uppercase data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md transition-all">
+               Identity
             </TabsTrigger>
-            <TabsTrigger value="security" className="flex-1">
-              <ShieldCheck className="w-4 h-4 mr-1.5" /> Security
+            <TabsTrigger value="security" className="flex-1 py-2.5 rounded-lg text-xs font-semibold tracking-widest uppercase data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md transition-all">
+               Security
             </TabsTrigger>
           </TabsList>
 
@@ -221,11 +228,11 @@ export default function ProfilePage() {
 
         <Button
           variant="outline"
-          className="w-full mt-4 text-red-400 border-red-400/30 hover:bg-red-400/10"
+          className="w-full mt-8 h-14 rounded-2xl text-xs uppercase tracking-widest font-bold text-red-400 border-red-500/20 bg-red-500/5 hover:bg-red-500/10 hover:text-red-400 transition-colors animate-stagger-3"
           onClick={handleLogout}
         >
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
+          <LogOut className="w-4 h-4 mr-2" strokeWidth={2} />
+          Disconnect
         </Button>
       </div>
     </AppLayout>
