@@ -1,2 +1,4 @@
 - [CloudsWork stack decisions](cloudswork-stack.md) — auth token SHA256+salt, token key "cw_token", sessions table; admin support messages endpoint not in codegen, fetched manually.
 - [CloudsWork referral/commission system](cloudswork-referral-system.md) — referralsTable rows created at registration, commissions paid on deposit approval into commissionBalance (not walletBalance).
+- [CloudsWork financial mutations](cloudswork-financial-mutations.md) — balance-changing endpoints must be transaction-protected, row-locked, and idempotent; use SQL increments, not read-modify-write.
+- [CloudsWork auth resilience](cloudswork-auth-resilience.md) — only clear the frontend session on 401/403; preserve token on transient network/server errors.
