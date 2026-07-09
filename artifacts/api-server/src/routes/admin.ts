@@ -215,7 +215,7 @@ router.post("/deposits/:id/approve", async (req, res) => {
   });
 
   // Distribute referral commissions to upline (L1/L2/L3)
-  await distributeReferralCommissions(dep.userId, parseFloat(dep.amount), "deposit");
+  await distributeReferralCommissions(db, dep.userId, parseFloat(dep.amount), "deposit");
 
   const [updated] = await db.select().from(depositsTable).where(eq(depositsTable.id, id));
   res.json(fmtDeposit(updated));

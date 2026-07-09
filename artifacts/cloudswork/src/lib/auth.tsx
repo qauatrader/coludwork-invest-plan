@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User } from '@workspace/api-client-react';
+import { User, useGetCurrentUser, getGetCurrentUserQueryKey } from '@workspace/api-client-react';
 
 interface AuthContextType {
   user: User | null;
@@ -7,34 +7,65 @@ interface AuthContextType {
   login: (token: string, user: User) => void;
   logout: () => void;
   isLoading: boolean;
+  isError: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const TOKEN_KEY = 'cw_token';
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [token, setToken] = useState<string | null>(localStorage.getItem(TOKEN_KEY));
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('cw_token'));
   const [isLoading, setIsLoading] = useState(true);
 
+  const { data, error, isLoading: queryLoading, refetch } = useGetCurrentUser({
+    query: {
+      queryKey: getGetCurrentUserQueryKey(),
+      enabled: !!token,
+      retry: false,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    },
+  });
+
   useEffect(() => {
-    // We assume get current user will be handled at the app level if token exists
-    setIsLoading(false);
-  }, []);
+    if (!token) {
+      setUser(null);
+      setIsLoading(false);
+      return;
+    }
+
+    // While token exists, wait for the user query to resolve
+    setIsLoading(queryLoading);
+
+    if (data) {
+      setUser(data);
+    }
+
+    if (error) {
+      // Token is invalid or expired
+      localStorage.removeItem(TOKEN_KEY);
+      setToken(null);
+      setUser(null);
+    }
+  }, [token, data, error, queryLoading]);
 
   const login = (newToken: string, newUser: User) => {
-    localStorage.setItem('cw_token', newToken);
+    localStorage.setItem(TOKEN_KEY, newToken);
     setToken(newToken);
     setUser(newUser);
+    // Refresh from server on next render to ensure fresh data
+    refetch().catch(() => {});
   };
 
   const logout = () => {
-    localStorage.removeItem('cw_token');
+    localStorage.removeItem(TOKEN_KEY);
     setToken(null);
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, token, login, logout, isLoading, isError: !!error }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { db, usersTable, depositsTable, withdrawalsTable, transactionsTable, paymentMethodsTable, systemSettingsTable } from "@workspace/db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import { authenticateToken } from "../lib/auth";
 
 const router = Router();
@@ -90,36 +90,49 @@ router.post("/withdraw", authenticateToken, async (req, res) => {
     return;
   }
 
-  const fee = amountNum * feeRate;
-  const netAmount = amountNum - fee;
+  const fee = Math.round(amountNum * feeRate * 100) / 100;
+  const netAmount = Math.round((amountNum - fee) * 100) / 100;
 
-  const balance = parseFloat((req as any).user.withdrawBalance ?? "0");
-  if (balance < amountNum) {
-    res.status(400).json({ error: "Insufficient withdrawal balance" });
-    return;
+  try {
+    const result = await db.transaction(async (tx) => {
+      const users = await tx.select().from(usersTable).where(eq(usersTable.id, user.id)).for("update").limit(1);
+      const freshUser = users[0];
+      const balance = parseFloat(freshUser.withdrawBalance ?? "0");
+      if (balance < amountNum) return { error: "Insufficient withdrawal balance", status: 400 };
+
+      const [withdrawal] = await tx.insert(withdrawalsTable).values({
+        userId: user.id, amount: String(amountNum), fee: String(fee), netAmount: String(netAmount),
+        walletType, accountTitle: accountTitle ?? null, iban: iban ?? null, walletAddress: walletAddress ?? null,
+      }).returning();
+
+      await tx.update(usersTable)
+        .set({ withdrawBalance: sql`${usersTable.withdrawBalance} - ${amountNum}` })
+        .where(eq(usersTable.id, user.id));
+
+      return { withdrawal };
+    });
+
+    if ("error" in result) {
+      res.status(result.status as number).json({ error: result.error });
+      return;
+    }
+
+    res.json(fmtWithdrawal(result.withdrawal));
+  } catch (err) {
+    console.error("Withdrawal failed", err);
+    res.status(500).json({ error: "Withdrawal failed. Please try again." });
   }
-
-  const [withdrawal] = await db.insert(withdrawalsTable).values({
-    userId: user.id, amount: String(amountNum), fee: String(fee), netAmount: String(netAmount),
-    walletType, accountTitle: accountTitle ?? null, iban: iban ?? null, walletAddress: walletAddress ?? null,
-  }).returning();
-
-  // Deduct balance
-  await db.update(usersTable).set({ withdrawBalance: String(balance - amountNum) }).where(eq(usersTable.id, user.id));
-
-  res.json(fmtWithdrawal(withdrawal));
 });
 
 // GET /wallet/transactions
 router.get("/transactions", authenticateToken, async (req, res) => {
   const user = (req as any).user;
   const { type = "all", page = "1" } = req.query as any;
-  const pageNum = parseInt(page);
+  const pageNum = parseInt(page) || 1;
   const limit = 20;
   const offset = (pageNum - 1) * limit;
 
-  let query = db.select().from(transactionsTable).where(eq(transactionsTable.userId, user.id));
-  const all = await db.select().from(transactionsTable).where(eq(transactionsTable.userId, user.id)).orderBy(desc(transactionsTable.createdAt));
+  let all = await db.select().from(transactionsTable).where(eq(transactionsTable.userId, user.id)).orderBy(desc(transactionsTable.createdAt));
   const filtered = type === "all" ? all : all.filter(t => t.type === type);
   const paged = filtered.slice(offset, offset + limit);
 
